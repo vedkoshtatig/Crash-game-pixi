@@ -3,12 +3,12 @@ body {
   background: #1b1b1b;
 }
 
-#app {
-  padding: 8px;      
+/* #app {
+  padding: 8px;        /* ← margin like Aviator */
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
-}
+} */
 
 #pixi-container {
   width: 100%;

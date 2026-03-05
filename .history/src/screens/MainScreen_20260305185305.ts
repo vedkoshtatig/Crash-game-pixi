@@ -39,14 +39,14 @@ export class MainScreen extends Container {
     );
   }
 
-  private layout() {
+  // private layout() {
 
-    // call layout of all components
-    this.header.layout?.();
-    this.sideBar.layout?.();
-    this.betHistory.layout?.();
-    this.flyArea.layout?.();
-    this.betPanel.layout?.();
+  //   // call layout of all components
+  //   this.header.layout?.();
+  //   this.sideBar.layout?.();
+  //   this.betHistory.layout?.();
+  //   this.flyArea.layout?.();
+  //   this.betPanel.layout?.();
 
-  }
+  // }
 }

@@ -15,7 +15,7 @@ export class Header extends Container {
 
     this.init();
     this.layout();
-console.log(Header.height);
+
     window.addEventListener("resize", () => this.layout());
   }
 
@@ -43,7 +43,6 @@ console.log(Header.height);
     this.balance.addChild(this.amount, this.currency);
 
     this.addChild(this.bg, this.logo, this.balance);
-   
   }
 
   layout() {
@@ -55,7 +54,7 @@ console.log(Header.height);
     // redraw bg
     this.bg.clear()
       .rect(0, 0, width, headerHeight)
-      .fill(0xff000);
+      .fill(0xff0000);
 
     // logo position
     this.logo.position.set(20, headerHeight / 2 - this.logo.height / 2);

@@ -27,12 +27,11 @@ export class SideBar extends Container {
     const sidebarWidth = width / 3.7;
 
     this.bg.clear()
-      .roundRect(
+      .roundrect(
         0,
         headerHeight,
         sidebarWidth,
-        height - headerHeight,
-        20
+        height - headerHeight
       )
       .fill(0xff0000);
 

@@ -31,8 +31,7 @@ export class SideBar extends Container {
         0,
         headerHeight,
         sidebarWidth,
-        height - headerHeight,
-        20
+        height - headerHeight
       )
       .fill(0xff0000);
 

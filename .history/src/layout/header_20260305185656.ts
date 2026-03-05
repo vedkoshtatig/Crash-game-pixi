@@ -15,7 +15,7 @@ export class Header extends Container {
 
     this.init();
     this.layout();
-console.log(Header.height);
+
     window.addEventListener("resize", () => this.layout());
   }
 
@@ -43,7 +43,7 @@ console.log(Header.height);
     this.balance.addChild(this.amount, this.currency);
 
     this.addChild(this.bg, this.logo, this.balance);
-   
+    
   }
 
   layout() {

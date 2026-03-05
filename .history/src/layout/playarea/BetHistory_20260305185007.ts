@@ -1,7 +1,7 @@
 import { Graphics, Container } from "pixi.js";
-import { app } from "../main";
+import { app } from "../../main";
 
-export class SideBar extends Container {
+export class BetHistory extends Container {
 
   private bg!: Graphics;
 
@@ -23,18 +23,18 @@ export class SideBar extends Container {
 
     const { width, height } = app.screen;
 
-    const headerHeight = height / 18;
     const sidebarWidth = width / 3.7;
+    const headerHeight = height / 18;
+    const betHistoryHeight = height / 18;
 
     this.bg.clear()
-      .roundRect(
-        0,
-        headerHeight,
+      .rect(
         sidebarWidth,
-        height - headerHeight,
-        20
+        headerHeight,
+        width - sidebarWidth,
+        betHistoryHeight
       )
-      .fill(0xff0000);
+      .fill(0xffff00);
 
   }
 }

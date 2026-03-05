@@ -43,7 +43,7 @@ console.log(Header.height);
     this.balance.addChild(this.amount, this.currency);
 
     this.addChild(this.bg, this.logo, this.balance);
-   
+    console.log(Header.height);
   }
 
   layout() {

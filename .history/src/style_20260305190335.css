@@ -3,8 +3,8 @@ body {
   background: #1b1b1b;
 }
 
-#app {
-  padding: 8px;      
+#app-wrapper {
+  padding: 12px;        /* ← margin like Aviator */
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
