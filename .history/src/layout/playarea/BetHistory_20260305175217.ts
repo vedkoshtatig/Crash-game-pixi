@@ -1,0 +1,11 @@
+import { Graphics, Text, Container, Application } from "pixi.js";
+import { app } from "../main";
+import { SideBar } from "../SideBar";
+export class BetHistory extends Container {
+ public sideBar !: Header
+  constructor() {
+    super();
+    this.sideBar = new sideBar()
+    this.build();
+  }
+  }

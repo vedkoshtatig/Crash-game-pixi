@@ -1,0 +1,29 @@
+import { Application } from "pixi.js";
+import { Game } from "./core/Game";
+import "./style.css";
+
+export let app: Application;
+
+(async () => {
+
+  // Create PIXI app
+  app = new Application();
+
+  await app.init({
+    background: "0x22222",
+    resizeTo: window,
+    antialias: true
+  });
+
+  // Add canvas to HTML
+  document
+    .getElementById("pixi-container")!
+    .appendChild(app.canvas);
+
+  // Initialize game
+  Game.init(app);
+
+  // Start game
+  Game.start();
+
+})();

@@ -1,0 +1,16 @@
+import { Graphics , Text , Container } from "pixi.js";  
+import { app } from "../main";
+export class Header extends Container{
+private logo !: Text;
+private app
+constructor(){
+    super();
+    this.build()
+    
+}
+build(){
+     const rect = new Graphics()
+     .rect(0,0,this.app,100)
+
+}
+}
