@@ -1,0 +1,179 @@
+import { Graphics, Container, Sprite, Text, Texture } from "pixi.js";
+import { app } from "../../main";
+// import { gameEvents } from "../../controller/GameController";
+
+export class FlyArea extends Container {
+  private bg!: Sprite;
+  private plane!: Sprite;
+
+  private multiplier = 1;
+  private multiplierText!: Text;
+private flyWidth = 0;
+private flyHeight = 0;
+  private startX = 100;
+  private startY = 400;
+  private time = 0;
+  private isFlying = false;
+  private takeoffTime = 0.7;
+  private crashAt = 3; // crash after 3 seconds
+  private idleTexture = Texture.from("/plane-idle.png");
+  private runTexture = Texture.from("/plane-run.png");
+  private blastTexture = Texture.from("/plane-blast.png");
+
+  constructor() {
+    super();
+
+    this.init();
+    this.layout();
+
+    window.addEventListener("resize", () => this.layout());
+    app.ticker.add((ticker) => this.update(ticker.deltaTime));
+    this.startRound();
+    this.initEvents();
+  }
+
+  init() {
+    this.bg = Sprite.from("/bg.png");
+
+    this.plane = new Sprite(this.idleTexture);
+    this.plane.anchor.set(0.5);
+
+    this.multiplierText = new Text({
+      text: "1.00x",
+      style: {
+        fill: "#ffffff",
+        fontSize: 48,
+        fontWeight: "bold",
+      },
+    });
+
+    this.addChild(this.bg, this.plane, this.multiplierText);
+  }
+update(delta: number) {
+
+  if (!this.isFlying) return;
+
+  this.time += delta / 60;
+
+  this.flyPlane(this.time);
+
+  // if (this.time >= this.crashAt) {
+  //   this.isFlying = false;
+  //   this.crashPlane(this.multiplier);
+
+  //   setTimeout(() => {
+  //     this.resetPlane();
+  //     this.startRound();
+  //   }, 2000);
+  // }
+}
+startRound() {
+
+  this.time = 0;
+  this.isFlying = true;
+
+  this.resetPlane();
+
+}
+ layout() {
+  const { width, height } = app.screen;
+
+  const sidebarWidth = width / 3.6;
+  const flyAreaHeight = height / 1.6;
+
+  this.flyWidth = width - sidebarWidth;
+  this.flyHeight = flyAreaHeight;
+
+  this.bg.width = this.flyWidth;
+  this.bg.height = this.flyHeight;
+
+  this.multiplierText.position.set(this.flyWidth / 2, 120);
+
+  this.plane.scale.set(0.2);
+
+  if (!this.isFlying) {
+    this.plane.position.set(this.startX, this.startY);
+  }
+}
+
+  initEvents() {
+    // gameEvents.on("round:waiting", () => {
+    //   console.log("Place your bets");
+    //   // this.resetPlane();
+    // });
+    // gameEvents.on("round:start", () => {
+    //   console.log("Cant place bets , plane runnings");
+    //   // this.resetPlane();
+    // });
+    // gameEvents.on("plane:update", (data) => {
+    //   console.log("Cant place bets , plane running");
+    //   this.updatePlane(data.time);
+    // });
+    // gameEvents.on("plane:crash", (data) => {
+    //   this.crashPlane(data.crashRate);
+    // });
+  }
+flyPlane(time: number) {
+
+  this.plane.texture = this.runTexture;
+
+  this.multiplier = Math.exp(time * 0.3);
+  this.multiplierText.text = this.multiplier.toFixed(2) + "x";
+
+  const maxX = this.flyWidth - 80;
+  const maxY = 80;
+
+  let x;
+  let y;
+
+  // PHASE 1 — RUNWAY ROLL
+  if (time < this.takeoffTime) {
+
+    const progress = time / this.takeoffTime;
+
+    x = this.startX + progress * 200;
+    y = this.startY;
+
+    this.plane.rotation = 0;
+
+  }
+
+  // PHASE 2 — TAKEOFF + CLIMB
+  else {
+
+    const t = time - this.takeoffTime;
+
+    x = this.startX + 200 + t * 220;
+    y = (this.startY - Math.pow(t, 2) * 60)-100;
+
+    if (this.plane.rotation > -0.45) {
+      this.plane.rotation -= 0.004;
+    }
+
+  }
+
+  x = Math.min(x, maxX);
+  y = Math.max(y, maxY);
+
+  this.plane.position.set(x, y);
+}
+
+  // crashPlane(rate: number) {
+  //   this.plane.texture = this.blastTexture;
+  //   this.multiplierText.text = `Crashed @ ${3}x`;
+
+  //   this.plane.rotation = 2;
+
+  //   console.log("CRASH", rate);
+  // }
+
+  resetPlane() {
+    this.multiplier = 1;
+    this.multiplierText.text = "1.00x";
+
+    this.plane.texture = this.idleTexture;
+    this.plane.rotation = 0;
+
+    this.plane.position.set(this.startX, this.startY);
+  }
+}
