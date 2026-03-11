@@ -133,7 +133,7 @@ if (Math.random() < 0.5) {
       const baseSpeed = (cloud as any).baseSpeed;
 
       let speed;
-      speed = baseSpeed + this.multiplier*1.9;
+      speed = baseSpeed + this.multiplier;
       speed = Math.min(speed, 12);
 
       const depthFactor = cloud.scale.x;
@@ -241,7 +241,7 @@ this.multiplierText.position.set(centerX+150, centerY);
 this.timerText.anchor.set(0.5);
 this.timerText.position.set(centerX+150, centerY-100);
 
-    this.plane.scale.set(0.5);
+    this.plane.scale.set(0.35);
 
     if (!this.isFlying && !this.isCrashed) {
       this.plane.position.set(this.startX, this.startY);
@@ -360,7 +360,7 @@ this.bg.position.set(
     const runwayTime = 0.4;
 
     const x = Math.min(this.startX + time *900, maxX);
-const reachedCruise = x >= maxX;
+
     if (!this.zoomTriggered && x >= this.flyWidth * 0.25) {
       this.zoomTriggered = true;
 
@@ -395,55 +395,26 @@ const reachedCruise = x >= maxX;
 
     let y;
 
-if (time < runwayTime) {
-  y = this.startY;
-}
-else {
-
-  const flyTime = time - runwayTime;
-
-  const climbY = this.startY - Math.pow(flyTime, 2) * 350;
-
-  if (climbY > maxY) {
-    y = climbY;
-  }
-  else {
-    // ⭐ TURBULENCE HOVER
-    const t = performance.now() * 0.004;
-
-    const hoverOffset =
-      Math.sin(t) * 6 +          // main float
-      Math.sin(t * 2.3) * 3 +    // jitter
-      Math.sin(t * 5.7) * 1.5;   // micro shake
-
-    y = maxY + hoverOffset;
-  }
-}
+    if (time < runwayTime) {
+      y = this.startY;
+    } else {
+      const flyTime = time - runwayTime;
+      y = Math.max(
+        this.startY - Math.pow(flyTime, 2) * 350,
+        maxY
+      );
+    }
 
     this.plane.x = x;
     this.plane.y = y;
 
-   if (time > runwayTime) {
-
-  const flyTime = time - runwayTime;
-  const targetRotation = Math.min(flyTime * 0.4, 0.45);
-
-  if (reachedCruise) {
-
-    const t = performance.now() * 0.003;
-
-    this.plane.rotation =
-      -0.45 +
-      Math.sin(t) * 0.04 +
-      Math.sin(t * 3) * 0.015;
-
-  } else {
-    this.plane.rotation = -targetRotation;
-  }
-
-} else {
-  this.plane.rotation = 0;
-}
+    if (time > runwayTime) {
+      const flyTime = time - runwayTime;
+      const targetRotation = Math.min(flyTime * 0.4, 0.45);
+      this.plane.rotation = -targetRotation;
+    } else {
+      this.plane.rotation = 0;
+    }
   }
 
   waitTimer(seconds: number) {

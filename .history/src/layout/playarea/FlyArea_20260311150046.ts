@@ -241,7 +241,7 @@ this.multiplierText.position.set(centerX+150, centerY);
 this.timerText.anchor.set(0.5);
 this.timerText.position.set(centerX+150, centerY-100);
 
-    this.plane.scale.set(0.5);
+    this.plane.scale.set(0.35);
 
     if (!this.isFlying && !this.isCrashed) {
       this.plane.position.set(this.startX, this.startY);
