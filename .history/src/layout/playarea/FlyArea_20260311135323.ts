@@ -86,7 +86,7 @@ export class FlyArea extends Container {
     this.multiplierText = new Text({
       text: "1.00x",
       style: {
-        fill: "0x222222",
+        fill: "#ffffff",
         fontSize: 48,
         fontWeight: "bold",
       },
@@ -116,8 +116,8 @@ if (Math.random() < 0.5) {
   cloud.y = cam.top - margin;
 } else {
   // spawn right side
-  cloud.x = this.x+100;
-  cloud.y = -50;
+  cloud.x = cam.right + margin;
+  cloud.y = cam.top + Math.random() * (cam.bottom - cam.top);
 }
 
       (cloud as any).baseSpeed = 3;
@@ -254,7 +254,7 @@ private getCameraBounds() {
   const viewH = this.height;
 
   const viewX = this.x ;
-  const viewY = 0 ;
+  const viewY = -this.y / scale;
 
   return {
     left: viewX,

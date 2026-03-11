@@ -69,18 +69,29 @@ if (event.includes("graphTimer")) {
 
   const running = data.data.runningStatus;
   const tenths = data.data.secondTenths;
-  console.log(data.data.secondTenths,data.data.runningStatus,event);
 
+  console.log(tenths, running, event);
+
+  // ⭐ detect crash EXACT moment flight stops
+  if (this.wasRunning && !running) {
+
+    this.flightStarted = false;
+    this.zeroSeen = false;
+    this.wasRunning = false;
+
+    gameEvents.emit("plane:crash");   // instant crash
+    return;
+  }
+
+  // ⭐ normal running updates
   if (running) {
 
-    // ✅ zero control logic
+    this.wasRunning = true;
+
+    // allow only first zero
     if (tenths === 0) {
-
-      if (this.zeroSeen) {
-        return; // skip second zero
-      }
-
-      this.zeroSeen = true; // allow first zero
+      if (this.zeroSeen) return;
+      this.zeroSeen = true;
     }
 
     if (!this.flightStarted) {
@@ -104,7 +115,6 @@ if (event.includes("graphTimer")) {
         gameEvents.emit("plane:crash", { crashRate });
 
         console.log("Plane crashed at", crashRate);
-        this.zeroSeen=false;
       }
     });
   }

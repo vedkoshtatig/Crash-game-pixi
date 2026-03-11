@@ -86,7 +86,7 @@ export class FlyArea extends Container {
     this.multiplierText = new Text({
       text: "1.00x",
       style: {
-        fill: "0x222222",
+        fill: "#ffffff",
         fontSize: 48,
         fontWeight: "bold",
       },
@@ -116,8 +116,8 @@ if (Math.random() < 0.5) {
   cloud.y = cam.top - margin;
 } else {
   // spawn right side
-  cloud.x = this.x+100;
-  cloud.y = -50;
+  cloud.x = cam.right + margin;
+  cloud.y = cam.top + Math.random() * (cam.bottom - cam.top);
 }
 
       (cloud as any).baseSpeed = 3;
@@ -248,19 +248,18 @@ this.timerText.position.set(centerX+150, centerY-100);
     }
   }
 private getCameraBounds() {
-  const scale = this.scale.x;
 
-  const viewW = this.width;
-  const viewH = this.height;
+  const viewW = this.width / this.scale.x;
+  const viewH = this.height / this.scale.y;
 
-  const viewX = this.x ;
-  const viewY = 0 ;
+  const left = (this.WORLD_WIDTH - viewW) * 0.5;
+  const top  = (this.WORLD_HEIGHT - viewH) * 0.5;
 
   return {
-    left: viewX,
-    right: viewX + viewW,
-    top: viewY,
-    bottom: viewY + viewH
+    left,
+    right: left + viewW,
+    top,
+    bottom: top + viewH
   };
 }
   startCameraTransition() {

@@ -86,7 +86,7 @@ export class FlyArea extends Container {
     this.multiplierText = new Text({
       text: "1.00x",
       style: {
-        fill: "0x222222",
+        fill: "#ffffff",
         fontSize: 48,
         fontWeight: "bold",
       },
@@ -116,8 +116,8 @@ if (Math.random() < 0.5) {
   cloud.y = cam.top - margin;
 } else {
   // spawn right side
-  cloud.x = this.x+100;
-  cloud.y = -50;
+  cloud.x = cam.right + margin;
+  cloud.y = cam.top + Math.random() * (cam.bottom - cam.top);
 }
 
       (cloud as any).baseSpeed = 3;
@@ -231,15 +231,13 @@ this.bg.scale.set(BASE_BG_SCALE_X,BASE_BG_SCALE_Y);
     this.startX = this.flyWidth * 0.1;
     this.startY = this.flyHeight * 0.86;
 
-    // ⭐ PERFECT VISUAL CENTER
-const centerX = this.WORLD_WIDTH / 2;
-const centerY = this.WORLD_HEIGHT / 2;
+    this.multiplierText.anchor.set(0.5);
+    this.multiplierText.position.set(
+      this.flyWidth / 2,
+      this.flyHeight / 2
+    );
 
-this.multiplierText.anchor.set(0.5);
-this.multiplierText.position.set(centerX+150, centerY);
-
-this.timerText.anchor.set(0.5);
-this.timerText.position.set(centerX+150, centerY-100);
+    this.timerText.position.set(this.flyWidth / 2, 200);
 
     this.plane.scale.set(0.35);
 
@@ -250,11 +248,11 @@ this.timerText.position.set(centerX+150, centerY-100);
 private getCameraBounds() {
   const scale = this.scale.x;
 
-  const viewW = this.width;
-  const viewH = this.height;
+  const viewW = app.screen.width / scale;
+  const viewH = app.screen.height / scale;
 
-  const viewX = this.x ;
-  const viewY = 0 ;
+  const viewX = -this.x / scale;
+  const viewY = -this.y / scale;
 
   return {
     left: viewX,
@@ -400,7 +398,7 @@ this.bg.position.set(
     } else {
       const flyTime = time - runwayTime;
       y = Math.max(
-        this.startY - Math.pow(flyTime, 2) * 350,
+        this.startY - Math.pow(flyTime, 2) * 320,
         maxY
       );
     }
@@ -423,7 +421,7 @@ this.bg.position.set(
     }
 
     this.timerText.visible = true;
-   
+    this.timerText.position.set(this.flyWidth / 2, 200);
 
     let remaining = seconds;
     this.timerText.text = remaining.toString();

@@ -86,7 +86,7 @@ export class FlyArea extends Container {
     this.multiplierText = new Text({
       text: "1.00x",
       style: {
-        fill: "0x222222",
+        fill: "#ffffff",
         fontSize: 48,
         fontWeight: "bold",
       },
@@ -108,7 +108,7 @@ export class FlyArea extends Container {
       cloud.visible = false;
       cloud.alpha = 0;
 const margin = 350;
-const cam = this.getCameraBounds();
+const cam = this.getVisibleFlyRect();
 
 if (Math.random() < 0.5) {
   // spawn above visible area
@@ -116,8 +116,8 @@ if (Math.random() < 0.5) {
   cloud.y = cam.top - margin;
 } else {
   // spawn right side
-  cloud.x = this.x+100;
-  cloud.y = -50;
+  cloud.x = cam.right + margin;
+  cloud.y = cam.top + Math.random() * (cam.bottom - cam.top);
 }
 
       (cloud as any).baseSpeed = 3;
@@ -141,7 +141,7 @@ if (Math.random() < 0.5) {
       cloud.x -= speed * depthFactor;
       cloud.y += speed * depthFactor;
 
-     const cam = this.getCameraBounds();
+     const cam = this.getfly();
 const margin = 350;
 
 if (
@@ -247,20 +247,37 @@ this.timerText.position.set(centerX+150, centerY-100);
       this.plane.position.set(this.startX, this.startY);
     }
   }
-private getCameraBounds() {
+// private getCameraBounds() {
+//   const scale = this.scale.x;
+
+//   const viewW = app.screen.width / scale;
+//   const viewH = app.screen.height / scale;
+
+//   const viewX = -this.x / scale;
+//   const viewY = -this.y / scale;
+
+//   return {
+//     left: viewX,
+//     right: viewX + viewW,
+//     top: viewY,
+//     bottom: viewY + viewH
+//   };
+// }
+private getVisibleFlyRect() {
+
   const scale = this.scale.x;
 
-  const viewW = this.width;
-  const viewH = this.height;
+  const viewW = app.screen.width / scale;
+  const viewH = app.screen.height / scale;
 
-  const viewX = this.x ;
-  const viewY = 0 ;
+  const left = (this.WORLD_WIDTH - viewW) / 2;
+  const top = (this.WORLD_HEIGHT - viewH) / 2;
 
   return {
-    left: viewX,
-    right: viewX + viewW,
-    top: viewY,
-    bottom: viewY + viewH
+    left,
+    right: left + viewW,
+    top,
+    bottom: top + viewH
   };
 }
   startCameraTransition() {

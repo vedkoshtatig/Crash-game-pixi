@@ -24,7 +24,7 @@ export class FlyArea extends Container {
 
   private WORLD_WIDTH = 1920;
   private WORLD_HEIGHT = 1080;
-
+private zoomFactor = 1.4;   // cinematic zoom strength
   private startX = 0;
   private startY = 0;
   private bgScaleX :number =0;
@@ -86,7 +86,7 @@ export class FlyArea extends Container {
     this.multiplierText = new Text({
       text: "1.00x",
       style: {
-        fill: "0x222222",
+        fill: "#ffffff",
         fontSize: 48,
         fontWeight: "bold",
       },
@@ -116,8 +116,8 @@ if (Math.random() < 0.5) {
   cloud.y = cam.top - margin;
 } else {
   // spawn right side
-  cloud.x = this.x+100;
-  cloud.y = -50;
+  cloud.x = cam.right + margin;
+  cloud.y = cam.top + Math.random() * (cam.bottom - cam.top);
 }
 
       (cloud as any).baseSpeed = 3;
@@ -196,15 +196,16 @@ if (
     const screenW = app.screen.width;
     const screenH = app.screen.height;
 
-    const scale = Math.min(
-      screenW / this.WORLD_WIDTH,
-      screenH / this.WORLD_HEIGHT
-    );
+   const scale = Math.max(
+  screenW / this.WORLD_WIDTH,
+  screenH / this.WORLD_HEIGHT
+);
 
     this.scale.set(scale);
-
-    this.x = (screenW - this.WORLD_WIDTH * scale) / 2;
-    this.y = (screenH - this.WORLD_HEIGHT * scale) / 2;
+this.position.set(
+  screenW / 2 - (this.WORLD_WIDTH * scale) / 2,
+  screenH / 2 - (this.WORLD_HEIGHT * scale) / 2
+);
 
     this.flyWidth = this.WORLD_WIDTH;
     this.flyHeight = this.WORLD_HEIGHT;
@@ -248,19 +249,20 @@ this.timerText.position.set(centerX+150, centerY-100);
     }
   }
 private getCameraBounds() {
+
   const scale = this.scale.x;
 
-  const viewW = this.width;
-  const viewH = this.height;
+  const viewW = app.screen.width / scale;
+  const viewH = app.screen.height / scale;
 
-  const viewX = this.x ;
-  const viewY = 0 ;
+  const centerX = this.WORLD_WIDTH / 2;
+  const centerY = this.WORLD_HEIGHT / 2;
 
   return {
-    left: viewX,
-    right: viewX + viewW,
-    top: viewY,
-    bottom: viewY + viewH
+    left: centerX - viewW / 2,
+    right: centerX + viewW / 2,
+    top: centerY - viewH / 2,
+    bottom: centerY + viewH / 2
   };
 }
   startCameraTransition() {
@@ -364,12 +366,15 @@ this.bg.position.set(
     if (!this.zoomTriggered && x >= this.flyWidth * 0.25) {
       this.zoomTriggered = true;
 
-      gsap.to(this.bg.scale, {
-        x: 2.4,
-        y: 2.4,
-        duration: 2,
-        ease: "power2.out",
-      });
+      const targetScaleX = this.bgScaleX * this.zoomFactor;
+const targetScaleY = this.bgScaleY * this.zoomFactor;
+
+gsap.to(this.bg.scale, {
+  x: targetScaleX,
+  y: targetScaleY,
+  duration: 2,
+  ease: "power2.out",
+});
 
       gsap.to(this.bg, {
         y: this.flyHeight / 2 + 150,

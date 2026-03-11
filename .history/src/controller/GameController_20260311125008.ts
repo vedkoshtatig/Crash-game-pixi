@@ -5,7 +5,7 @@ export const gameEvents = new EventEmitter();
 
 export class GameController {
   private flightStarted = false;
-  private zeroSeen = false;
+  private zeroTickConsumed = false;
   constructor() {
     this.initSocket();
   }
@@ -66,22 +66,18 @@ export class GameController {
       // }
       // GRAPH TIMER (flight phase)
 if (event.includes("graphTimer")) {
-
+  let countTenths :number = 0;
   const running = data.data.runningStatus;
   const tenths = data.data.secondTenths;
-  console.log(data.data.secondTenths,data.data.runningStatus,event);
+  if(countTenths===0 && tenths===0){
+    countTenths=1;
+  }
+  // 🚀 HARD FILTER — ignore fake start tick
+  if (running && countTenths === 1) {
+    return;   // ❗ do absolutely nothing
+  }
 
   if (running) {
-
-    // ✅ zero control logic
-    if (tenths === 0) {
-
-      if (this.zeroSeen) {
-        return; // skip second zero
-      }
-
-      this.zeroSeen = true; // allow first zero
-    }
 
     if (!this.flightStarted) {
       this.flightStarted = true;
@@ -104,7 +100,6 @@ if (event.includes("graphTimer")) {
         gameEvents.emit("plane:crash", { crashRate });
 
         console.log("Plane crashed at", crashRate);
-        this.zeroSeen=false;
       }
     });
   }

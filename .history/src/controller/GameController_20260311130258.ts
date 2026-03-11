@@ -69,7 +69,7 @@ if (event.includes("graphTimer")) {
 
   const running = data.data.runningStatus;
   const tenths = data.data.secondTenths;
-  console.log(data.data.secondTenths,data.data.runningStatus,event);
+  console.log(object);
 
   if (running) {
 
@@ -104,7 +104,6 @@ if (event.includes("graphTimer")) {
         gameEvents.emit("plane:crash", { crashRate });
 
         console.log("Plane crashed at", crashRate);
-        this.zeroSeen=false;
       }
     });
   }

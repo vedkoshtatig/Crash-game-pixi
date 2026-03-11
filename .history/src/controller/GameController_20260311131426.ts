@@ -104,7 +104,6 @@ if (event.includes("graphTimer")) {
         gameEvents.emit("plane:crash", { crashRate });
 
         console.log("Plane crashed at", crashRate);
-        this.zeroSeen=false;
       }
     });
   }

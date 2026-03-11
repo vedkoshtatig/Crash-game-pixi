@@ -4,7 +4,6 @@ import { gameEvents } from "../../controller/GameController";
 import { gsap } from "gsap";
 
 // await Assets.load(["/bg.png","/plane-idle.png" , "/plane-run.png" ,"/plane-blast.png","Clouds_01.png"]);
-
 export class FlyArea extends Container {
   private bg!: Sprite;
   private plane!: Sprite;
@@ -14,28 +13,21 @@ export class FlyArea extends Container {
   private serverTime = 0;
   private lastUpdate = 0;
   private isWaiting = false;
-  private multiplier = 1;
 
+  private multiplier = 1;
   private multiplierText!: Text;
   private timerText!: Text;
 
   private flyWidth = 0;
   private flyHeight = 0;
 
-  private WORLD_WIDTH = 1920;
-  private WORLD_HEIGHT = 1080;
-
   private startX = 0;
   private startY = 0;
-  private bgScaleX :number =0;
-  private bgScaleY :number =0;
   private clouds: Sprite[] = [];
   private cloudTexture = Texture.from("/Clouds_01.png");
-
   private camProgress = 0;
   private camDuration = 1.5;
   private camAnimating = false;
-
   private zoomTriggered = false;
   private isFlying = false;
   private isCrashed = false;
@@ -58,11 +50,11 @@ export class FlyArea extends Container {
 
   constructor() {
     super();
+
     this.init();
     this.layout();
     this.initEvents();
     this.createClouds();
-
     window.addEventListener("resize", () => this.layout());
     app.ticker.add(this.update, this);
   }
@@ -79,14 +71,13 @@ export class FlyArea extends Container {
       },
     });
     this.timerText.visible = false;
-
     this.plane = new Sprite(this.idleTexture);
     this.plane.anchor.set(0.5);
 
     this.multiplierText = new Text({
       text: "1.00x",
       style: {
-        fill: "0x222222",
+        fill: "#ffffff",
         fontSize: 48,
         fontWeight: "bold",
       },
@@ -96,7 +87,7 @@ export class FlyArea extends Container {
   }
 
   createClouds() {
-    const cloudCount = 18;
+    const cloudCount = 12;
 
     for (let i = 0; i < cloudCount; i++) {
       const cloud = new Sprite(this.cloudTexture);
@@ -107,55 +98,54 @@ export class FlyArea extends Container {
 
       cloud.visible = false;
       cloud.alpha = 0;
-const margin = 350;
-const cam = this.getCameraBounds();
 
-if (Math.random() < 0.5) {
-  // spawn above visible area
-  cloud.x = cam.left + Math.random() * (cam.right - cam.left);
-  cloud.y = cam.top - margin;
-} else {
-  // spawn right side
-  cloud.x = this.x+100;
-  cloud.y = -50;
-}
+      // spawn outside screen initially
+      if (Math.random() < 0.5) {
+        // from top
+        cloud.x = Math.random() * this.flyWidth;
+        cloud.y = -150;
+      } else {
+        // from right
+        cloud.x = this.flyWidth + 150;
+        cloud.y = Math.random() * this.flyHeight;
+      }
 
-      (cloud as any).baseSpeed = 3;
+      (cloud as any).baseSpeed = 3; // your base pattern speed
       (cloud as any).initialBoost = true;
 
       this.clouds.push(cloud);
+
+      // add above bg but below plane
       this.addChildAt(cloud, 1);
     }
   }
-
   updateClouds() {
     for (let cloud of this.clouds) {
       const baseSpeed = (cloud as any).baseSpeed;
 
       let speed;
-      speed = baseSpeed + this.multiplier;
+
+      // first entry speed
+
+   speed = baseSpeed + this.multiplier ;
       speed = Math.min(speed, 12);
 
-      const depthFactor = cloud.scale.x;
+     
+
+      const depthFactor = cloud.scale.x; // bigger cloud = nearer
 
       cloud.x -= speed * depthFactor;
       cloud.y += speed * depthFactor;
 
-     const cam = this.getCameraBounds();
-const margin = 350;
-
-if (
-  cloud.x < cam.left - margin ||
-  cloud.y > cam.bottom + margin
-) {
-  if (Math.random() < 0.5) {
-    cloud.x = cam.left + Math.random() * (cam.right - cam.left);
-    cloud.y = cam.top - margin;
-  } else {
-    cloud.x = cam.right + margin;
-    cloud.y = cam.top + Math.random() * (cam.bottom - cam.top);
-  }
-}
+      if (cloud.x < -200 || cloud.y > this.flyHeight + 200) {
+        if (Math.random() < 0.5) {
+          cloud.x = Math.random() * this.flyWidth;
+          cloud.y = -150;
+        } else {
+          cloud.x = this.flyWidth + 150;
+          cloud.y = Math.random() * this.flyHeight;
+        }
+      }
     }
   }
 
@@ -171,15 +161,15 @@ if (
       const t = this.camProgress;
 
       const x = this.camStart.x + (this.camEnd.x - this.camStart.x) * t;
+
       const y = this.camStart.y + (this.camEnd.y - this.camStart.y) * t;
+
       const scale =
-        this.camStart.scale +
-        (this.camEnd.scale - this.camStart.scale) * t;
+        this.camStart.scale + (this.camEnd.scale - this.camStart.scale) * t;
 
       this.bg.position.set(x, y);
       this.bg.scale.set(scale);
     }
-
     if (this.cloudsActive) this.updateClouds();
     if (!this.isFlying) return;
 
@@ -187,59 +177,31 @@ if (
     const dt = (now - this.lastUpdate) / 1000;
 
     this.serverTime += dt;
+
     this.flyPlane(this.serverTime, this.multiplier);
 
     this.lastUpdate = now;
   }
 
   layout() {
-    const screenW = app.screen.width;
-    const screenH = app.screen.height;
+    const { width, height } = app.screen;
+    for (let cloud of this.clouds) {
+      cloud.x = Math.random() * this.flyWidth;
+      cloud.y = Math.random() * this.flyHeight;
+    }
+    this.flyWidth = width;
+    this.flyHeight = height;
 
-    const scale = Math.min(
-      screenW / this.WORLD_WIDTH,
-      screenH / this.WORLD_HEIGHT
-    );
-
-    this.scale.set(scale);
-
-    this.x = (screenW - this.WORLD_WIDTH * scale) / 2;
-    this.y = (screenH - this.WORLD_HEIGHT * scale) / 2;
-
-    this.flyWidth = this.WORLD_WIDTH;
-    this.flyHeight = this.WORLD_HEIGHT;
-
-    const CAM_OFFSET_X = 40;
-const CAM_OFFSET_Y = -80;
-
-const BASE_BG_SCALE_X = 1.9;
-const BASE_BG_SCALE_Y = 1.65;
-this.bgScaleX=BASE_BG_SCALE_X;
-this.bgScaleY = BASE_BG_SCALE_Y;
-
-this.bg.anchor.set(0.5);
-this.bg.position.set(
-  this.flyWidth / 2 + CAM_OFFSET_X,
-  this.flyHeight / 2 + CAM_OFFSET_Y
-);
-
-this.bg.width = this.flyWidth;
-this.bg.height = this.flyHeight;
-
-this.bg.scale.set(BASE_BG_SCALE_X,BASE_BG_SCALE_Y);
+    this.bg.position.set(width / 2 + 40, height / 2 - 80);
+    this.bg.width = this.flyWidth;
+    this.bg.height = this.flyHeight;
+    this.bg.anchor.set(0.5);
+    this.bg.scale.set(1.2);
 
     this.startX = this.flyWidth * 0.1;
     this.startY = this.flyHeight * 0.86;
-
-    // ⭐ PERFECT VISUAL CENTER
-const centerX = this.WORLD_WIDTH / 2;
-const centerY = this.WORLD_HEIGHT / 2;
-
-this.multiplierText.anchor.set(0.5);
-this.multiplierText.position.set(centerX+150, centerY);
-
-this.timerText.anchor.set(0.5);
-this.timerText.position.set(centerX+150, centerY-100);
+    this.multiplierText.anchor.set(0.5);
+    this.multiplierText.position.set(this.flyWidth / 2, this.flyHeight / 2);
 
     this.plane.scale.set(0.35);
 
@@ -247,22 +209,7 @@ this.timerText.position.set(centerX+150, centerY-100);
       this.plane.position.set(this.startX, this.startY);
     }
   }
-private getCameraBounds() {
-  const scale = this.scale.x;
 
-  const viewW = this.width;
-  const viewH = this.height;
-
-  const viewX = this.x ;
-  const viewY = 0 ;
-
-  return {
-    left: viewX,
-    right: viewX + viewW,
-    top: viewY,
-    bottom: viewY + viewH
-  };
-}
   startCameraTransition() {
     const { width, height } = app.screen;
 
@@ -282,29 +229,35 @@ private getCameraBounds() {
   }
 
   initEvents() {
+    // WAITING STATE
     gameEvents.on("round:waiting", (data: { seconds: number }) => {
       if (this.isWaiting) return;
-
       this.isCrashed = false;
       this.isWaiting = true;
 
       console.log("Waiting for next round");
 
       this.isFlying = false;
+
       this.serverTime = 0;
       this.lastUpdate = 0;
 
       this.resetScene();
       this.resetPlane();
+
       this.waitTimer(data.seconds);
     });
 
+    // ROUND START
     gameEvents.on("round:start", () => {
       console.log("Plane taking off");
+
       this.isWaiting = false;
+
       this.isFlying = true;
     });
 
+    // SERVER UPDATES
     gameEvents.on(
       "plane:update",
       (data: { time: number; multiplier: number }) => {
@@ -314,6 +267,7 @@ private getCameraBounds() {
       }
     );
 
+    // CRASH EVENT
     gameEvents.on("plane:crash", (data: { crashRate: number }) => {
       this.isFlying = false;
       this.crashPlane(data.crashRate);
@@ -321,17 +275,15 @@ private getCameraBounds() {
   }
 
   resetScene() {
-    // const { width, height } = app.screen;
+    const { width, height } = app.screen;
 
     this.cloudsActive = false;
     this.zoomTriggered = false;
 
-this.bg.position.set(
-  this.flyWidth / 2 + 40,
-  this.flyHeight / 2 - 80
-);
-    this.bg.scale.set(this.bgScaleX,this.bgScaleY);
+    this.bg.position.set(width / 2 + 40, height / 2 - 80);
+    this.bg.scale.set(1.2);
 
+    // fade clouds out
     this.clouds.forEach((cloud) => {
       gsap.to(cloud, {
         alpha: 0,
@@ -339,6 +291,7 @@ this.bg.position.set(
         onComplete: () => {
           cloud.visible = false;
 
+          // reset spawn outside screen
           if (Math.random() < 0.5) {
             cloud.x = Math.random() * this.flyWidth;
             cloud.y = -150;
@@ -353,21 +306,30 @@ this.bg.position.set(
 
   flyPlane(time: number, multiplier: number) {
     this.plane.texture = this.runTexture;
+
     this.multiplierText.text = multiplier.toFixed(2) + "x";
 
-    const maxX = this.flyWidth -150;
-    const maxY = 290;
+    const maxX = this.flyWidth - 230;
+    const maxY = 140;
+
     const runwayTime = 0.4;
 
-    const x = Math.min(this.startX + time *900, maxX);
+    // console.log(`position time  : ${time.toFixed(2)}`);
+    const x = Math.min(this.startX + time * 700, maxX);
+    // gsap.to(this.bg, {
+    //     x: this.flyWidth / 2-80,
 
+    //     duration: 2,
+    //     ease: "power2.out"
+    //   });
+    // trigger zoom once at 40%
     if (!this.zoomTriggered && x >= this.flyWidth * 0.25) {
       this.zoomTriggered = true;
 
       gsap.to(this.bg.scale, {
-        x: 2.4,
-        y: 2.4,
-        duration: 2,
+        x: 1.4,
+        y: 1.4,
+        duration: 5,
         ease: "power2.out",
       });
 
@@ -378,7 +340,6 @@ this.bg.position.set(
         ease: "power2.out",
       });
     }
-
     if (!this.cloudsActive && x >= this.flyWidth * 0.65) {
       this.cloudsActive = true;
 
@@ -399,18 +360,19 @@ this.bg.position.set(
       y = this.startY;
     } else {
       const flyTime = time - runwayTime;
-      y = Math.max(
-        this.startY - Math.pow(flyTime, 2) * 350,
-        maxY
-      );
+
+      y = Math.max(this.startY - Math.pow(flyTime, 2) * 320, maxY);
     }
 
     this.plane.x = x;
     this.plane.y = y;
 
+    // rotation control
     if (time > runwayTime) {
       const flyTime = time - runwayTime;
+
       const targetRotation = Math.min(flyTime * 0.4, 0.45);
+
       this.plane.rotation = -targetRotation;
     } else {
       this.plane.rotation = 0;
@@ -423,9 +385,10 @@ this.bg.position.set(
     }
 
     this.timerText.visible = true;
-   
+    this.timerText.position.set(this.flyWidth / 2, 200);
 
     let remaining = seconds;
+
     this.timerText.text = remaining.toString();
 
     this.countdownInterval = setInterval(() => {
@@ -443,13 +406,12 @@ this.bg.position.set(
   crashPlane(rate: number) {
     this.isCrashed = true;
     this.cloudsActive = false;
-
+    // STOP all camera animations
     gsap.killTweensOf(this.bg);
     gsap.killTweensOf(this.bg.scale);
 
     this.plane.texture = this.blastTexture;
     this.multiplierText.text = `Crashed @ ${rate.toFixed(2)}x`;
-
     this.plane.rotation = 2;
 
     console.log("CRASH", rate);
@@ -465,6 +427,7 @@ this.bg.position.set(
     gsap.killTweensOf(this.plane);
 
     const startLeft = -120;
+
     this.plane.position.set(startLeft, this.startY);
 
     gsap.to(this.plane, {

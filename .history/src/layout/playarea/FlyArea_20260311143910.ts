@@ -31,7 +31,8 @@ export class FlyArea extends Container {
   private bgScaleY :number =0;
   private clouds: Sprite[] = [];
   private cloudTexture = Texture.from("/Clouds_01.png");
-
+private turbulenceTween?: gsap.core.Tween;
+private turbulenceLevel = 0;
   private camProgress = 0;
   private camDuration = 1.5;
   private camAnimating = false;
@@ -350,7 +351,32 @@ this.bg.position.set(
       });
     });
   }
+private startTurbulence() {
 
+  if (this.turbulenceTween) return;
+
+  const applyShake = () => {
+
+    const intensity = Math.min(this.multiplier * 0.6, 8); // ⭐ grows with multiplier
+
+    const dy = gsap.utils.random(-intensity, intensity);
+    const rot = gsap.utils.random(-0.05, 0.05) * (intensity / 5);
+
+    this.turbulenceTween = gsap.to(this.plane, {
+      y: this.plane.y + dy,
+      rotation: this.plane.rotation + rot,
+      duration: gsap.utils.random(0.18, 0.35),
+      ease: "sine.inOut",
+      onComplete: () => {
+        this.turbulenceTween = undefined;
+        applyShake();
+      }
+    });
+
+  };
+
+  applyShake();
+}
   flyPlane(time: number, multiplier: number) {
     this.plane.texture = this.runTexture;
     this.multiplierText.text = multiplier.toFixed(2) + "x";
@@ -360,6 +386,7 @@ this.bg.position.set(
     const runwayTime = 0.4;
 
     const x = Math.min(this.startX + time *900, maxX);
+    const reachedCruise = x >= maxX;
 
     if (!this.zoomTriggered && x >= this.flyWidth * 0.25) {
       this.zoomTriggered = true;
@@ -395,26 +422,55 @@ this.bg.position.set(
 
     let y;
 
-    if (time < runwayTime) {
-      y = this.startY;
-    } else {
-      const flyTime = time - runwayTime;
-      y = Math.max(
-        this.startY - Math.pow(flyTime, 2) * 350,
-        maxY
-      );
-    }
+if (time < runwayTime) {
+  y = this.startY;
+}
+else {
+
+  const flyTime = time - runwayTime;
+
+  const climbY = this.startY - Math.pow(flyTime, 2) * 350;
+
+  if (climbY > maxY) {
+    y = climbY;
+  }
+  else {
+    // ⭐ TURBULENCE HOVER
+    const t = performance.now() * 0.004;
+
+    const hoverOffset =
+      Math.sin(t) * 6 +          // main float
+      Math.sin(t * 2.3) * 3 +    // jitter
+      Math.sin(t * 5.7) * 1.5;   // micro shake
+
+    y = maxY + hoverOffset;
+  }
+}
 
     this.plane.x = x;
     this.plane.y = y;
 
     if (time > runwayTime) {
-      const flyTime = time - runwayTime;
-      const targetRotation = Math.min(flyTime * 0.4, 0.45);
-      this.plane.rotation = -targetRotation;
-    } else {
-      this.plane.rotation = 0;
-    }
+
+  const flyTime = time - runwayTime;
+  const targetRotation = Math.min(flyTime * 0.4, 0.45);
+
+  if (reachedCruise) {
+
+    const t = performance.now() * 0.003;
+
+    this.plane.rotation =
+      -0.45 +
+      Math.sin(t) * 0.04 +
+      Math.sin(t * 3) * 0.015;
+
+  } else {
+    this.plane.rotation = -targetRotation;
+  }
+
+} else {
+  this.plane.rotation = 0;
+}
   }
 
   waitTimer(seconds: number) {
@@ -441,6 +497,8 @@ this.bg.position.set(
   }
 
   crashPlane(rate: number) {
+    gsap.killTweensOf(this.plane);
+this.turbulenceTween = undefined;
     this.isCrashed = true;
     this.cloudsActive = false;
 

@@ -35,7 +35,8 @@ export class FlyArea extends Container {
   private camProgress = 0;
   private camDuration = 1.5;
   private camAnimating = false;
-
+private turbulenceActive = false;
+private turbulenceTime = 0;
   private zoomTriggered = false;
   private isFlying = false;
   private isCrashed = false;

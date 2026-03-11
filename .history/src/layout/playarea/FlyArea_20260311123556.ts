@@ -86,7 +86,7 @@ export class FlyArea extends Container {
     this.multiplierText = new Text({
       text: "1.00x",
       style: {
-        fill: "0x222222",
+        fill: "#ffffff",
         fontSize: 48,
         fontWeight: "bold",
       },
@@ -96,7 +96,7 @@ export class FlyArea extends Container {
   }
 
   createClouds() {
-    const cloudCount = 18;
+    const cloudCount = 12;
 
     for (let i = 0; i < cloudCount; i++) {
       const cloud = new Sprite(this.cloudTexture);
@@ -107,17 +107,16 @@ export class FlyArea extends Container {
 
       cloud.visible = false;
       cloud.alpha = 0;
-const margin = 350;
-const cam = this.getCameraBounds();
+const margin = 250;   // distance outside screen
 
 if (Math.random() < 0.5) {
-  // spawn above visible area
-  cloud.x = cam.left + Math.random() * (cam.right - cam.left);
-  cloud.y = cam.top - margin;
+  // spawn above world
+  cloud.x = Math.random() * this.WORLD_WIDTH;
+  cloud.y = -margin;
 } else {
   // spawn right side
-  cloud.x = this.x+100;
-  cloud.y = -50;
+  cloud.x = this.WORLD_WIDTH + margin;
+  cloud.y = Math.random() * this.WORLD_HEIGHT;
 }
 
       (cloud as any).baseSpeed = 3;
@@ -137,23 +136,17 @@ if (Math.random() < 0.5) {
       speed = Math.min(speed, 12);
 
       const depthFactor = cloud.scale.x;
-
+const margin = 250;
       cloud.x -= speed * depthFactor;
       cloud.y += speed * depthFactor;
 
-     const cam = this.getCameraBounds();
-const margin = 350;
-
-if (
-  cloud.x < cam.left - margin ||
-  cloud.y > cam.bottom + margin
-) {
+     if (cloud.x < -margin || cloud.y > this.WORLD_HEIGHT + margin) {
   if (Math.random() < 0.5) {
-    cloud.x = cam.left + Math.random() * (cam.right - cam.left);
-    cloud.y = cam.top - margin;
+    cloud.x = Math.random() * this.WORLD_WIDTH;
+    cloud.y = -margin;
   } else {
-    cloud.x = cam.right + margin;
-    cloud.y = cam.top + Math.random() * (cam.bottom - cam.top);
+    cloud.x = this.WORLD_WIDTH + margin;
+    cloud.y = Math.random() * this.WORLD_HEIGHT;
   }
 }
     }
@@ -231,15 +224,13 @@ this.bg.scale.set(BASE_BG_SCALE_X,BASE_BG_SCALE_Y);
     this.startX = this.flyWidth * 0.1;
     this.startY = this.flyHeight * 0.86;
 
-    // ⭐ PERFECT VISUAL CENTER
-const centerX = this.WORLD_WIDTH / 2;
-const centerY = this.WORLD_HEIGHT / 2;
+    this.multiplierText.anchor.set(0.5);
+    this.multiplierText.position.set(
+      this.flyWidth / 2,
+      this.flyHeight / 2
+    );
 
-this.multiplierText.anchor.set(0.5);
-this.multiplierText.position.set(centerX+150, centerY);
-
-this.timerText.anchor.set(0.5);
-this.timerText.position.set(centerX+150, centerY-100);
+    this.timerText.position.set(this.flyWidth / 2, 200);
 
     this.plane.scale.set(0.35);
 
@@ -250,11 +241,11 @@ this.timerText.position.set(centerX+150, centerY-100);
 private getCameraBounds() {
   const scale = this.scale.x;
 
-  const viewW = this.width;
-  const viewH = this.height;
+  const viewW = app.screen.width / scale;
+  const viewH = app.screen.height / scale;
 
-  const viewX = this.x ;
-  const viewY = 0 ;
+  const viewX = -this.x / scale;
+  const viewY = -this.y / scale;
 
   return {
     left: viewX,
@@ -355,11 +346,11 @@ this.bg.position.set(
     this.plane.texture = this.runTexture;
     this.multiplierText.text = multiplier.toFixed(2) + "x";
 
-    const maxX = this.flyWidth -150;
-    const maxY = 290;
+    const maxX = this.flyWidth +100;
+    const maxY = 140;
     const runwayTime = 0.4;
 
-    const x = Math.min(this.startX + time *900, maxX);
+    const x = Math.min(this.startX + time *930, maxX);
 
     if (!this.zoomTriggered && x >= this.flyWidth * 0.25) {
       this.zoomTriggered = true;
@@ -400,7 +391,7 @@ this.bg.position.set(
     } else {
       const flyTime = time - runwayTime;
       y = Math.max(
-        this.startY - Math.pow(flyTime, 2) * 350,
+        this.startY - Math.pow(flyTime, 2) * 320,
         maxY
       );
     }
@@ -423,7 +414,7 @@ this.bg.position.set(
     }
 
     this.timerText.visible = true;
-   
+    this.timerText.position.set(this.flyWidth / 2, 200);
 
     let remaining = seconds;
     this.timerText.text = remaining.toString();

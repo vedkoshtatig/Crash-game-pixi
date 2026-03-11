@@ -35,7 +35,8 @@ export class FlyArea extends Container {
   private camProgress = 0;
   private camDuration = 1.5;
   private camAnimating = false;
-
+private turbulenceActive = false;
+private turbulenceTime = 0;
   private zoomTriggered = false;
   private isFlying = false;
   private isCrashed = false;
@@ -188,7 +189,7 @@ if (
 
     this.serverTime += dt;
     this.flyPlane(this.serverTime, this.multiplier);
-
+this.updateTurbulence(dt);
     this.lastUpdate = now;
   }
 
@@ -350,7 +351,23 @@ this.bg.position.set(
       });
     });
   }
+private updateTurbulence(dt: number) {
+  if (!this.turbulenceActive) return;
 
+  this.turbulenceTime += dt;
+
+  // intensity grows with multiplier
+  const intensity = Math.min(this.multiplier * 0.15, 8);
+
+  // smooth noise shake
+  const shakeX = Math.sin(this.turbulenceTime * 35) * intensity;
+  const shakeY = Math.cos(this.turbulenceTime * 28) * intensity * 0.6;
+  const rotShake = Math.sin(this.turbulenceTime * 22) * intensity * 0.002;
+
+  this.plane.x += shakeX * 0.05;
+  this.plane.y += shakeY * 0.05;
+  this.plane.rotation += rotShake;
+}
   flyPlane(time: number, multiplier: number) {
     this.plane.texture = this.runTexture;
     this.multiplierText.text = multiplier.toFixed(2) + "x";
@@ -407,7 +424,10 @@ this.bg.position.set(
 
     this.plane.x = x;
     this.plane.y = y;
-
+if (!this.turbulenceActive && (x >= maxX || y <= maxY)) {
+  this.turbulenceActive = true;
+  this.turbulenceTime = 0;
+}
     if (time > runwayTime) {
       const flyTime = time - runwayTime;
       const targetRotation = Math.min(flyTime * 0.4, 0.45);
@@ -441,6 +461,7 @@ this.bg.position.set(
   }
 
   crashPlane(rate: number) {
+    this.turbulenceActive = false;
     this.isCrashed = true;
     this.cloudsActive = false;
 
@@ -456,6 +477,8 @@ this.bg.position.set(
   }
 
   resetPlane() {
+    this.turbulenceActive = false;
+this.plane.scale.set(0.35);
     this.multiplier = 1;
     this.multiplierText.text = "1.00x";
 

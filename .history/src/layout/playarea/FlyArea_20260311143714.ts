@@ -360,6 +360,7 @@ this.bg.position.set(
     const runwayTime = 0.4;
 
     const x = Math.min(this.startX + time *900, maxX);
+    const reachedCruise = x >= maxX;
 
     if (!this.zoomTriggered && x >= this.flyWidth * 0.25) {
       this.zoomTriggered = true;
@@ -395,15 +396,30 @@ this.bg.position.set(
 
     let y;
 
-    if (time < runwayTime) {
-      y = this.startY;
-    } else {
-      const flyTime = time - runwayTime;
-      y = Math.max(
-        this.startY - Math.pow(flyTime, 2) * 350,
-        maxY
-      );
-    }
+if (time < runwayTime) {
+  y = this.startY;
+}
+else {
+
+  const flyTime = time - runwayTime;
+
+  const climbY = this.startY - Math.pow(flyTime, 2) * 350;
+
+  if (climbY > maxY) {
+    y = climbY;
+  }
+  else {
+    // ⭐ TURBULENCE HOVER
+    const t = performance.now() * 0.004;
+
+    const hoverOffset =
+      Math.sin(t) * 6 +          // main float
+      Math.sin(t * 2.3) * 3 +    // jitter
+      Math.sin(t * 5.7) * 1.5;   // micro shake
+
+    y = maxY + hoverOffset;
+  }
+}
 
     this.plane.x = x;
     this.plane.y = y;
