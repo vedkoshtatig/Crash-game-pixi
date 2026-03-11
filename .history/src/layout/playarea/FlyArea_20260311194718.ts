@@ -86,7 +86,7 @@ export class FlyArea extends Container {
      this.multiplierText = new Text({
       text: "1.00x",
       style: {
-        fill: "#ffd54a",
+        fill: ,
         fontSize: 96,
         fontWeight: "900",
       },
@@ -325,7 +325,7 @@ private getCameraBounds() {
 
     this.cloudsActive = false;
     this.zoomTriggered = false;
-this.multiplierText.style.fill="#ffd54a"
+
 this.bg.position.set(
   this.flyWidth / 2 + 40,
   this.flyHeight / 2 - 80
@@ -430,15 +430,14 @@ else {
 
   if (reachedCruise) {
 
-  // const t = performance.now() * 0.003;
+    const t = performance.now() * 0.003;
 
-  // this.plane.rotation =
-  //   -0.45 +
-  //   Math.sin(t) * 0.04 +
-  //   Math.sin(t * 3) * 0.015;
+    this.plane.rotation =
+      -0.45 +
+      Math.sin(t) * 0.04 +
+      Math.sin(t * 3) * 0.015;
 
-  this.plane.rotation = -0.45; // fixed stable cruise angle
-} else {
+  } else {
     this.plane.rotation = -targetRotation;
   }
 
@@ -448,77 +447,32 @@ else {
   }
 
   waitTimer(seconds: number) {
-  if (this.countdownInterval) {
-    clearInterval(this.countdownInterval);
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+
+    this.timerText.visible = true;
+   
+
+    let remaining = seconds;
+    this.timerText.text = remaining.toString();
+
+    this.countdownInterval = setInterval(() => {
+      remaining--;
+
+      if (remaining <= 0) {
+        clearInterval(this.countdownInterval);
+        this.timerText.visible = false;
+      } else {
+        this.timerText.text = remaining.toString();
+      }
+    }, 1000);
   }
 
-  this.timerText.visible = true;
-  this.timerText.style.fill=0x22222;
-
-  let remaining = seconds;
-  this.timerText.text = remaining.toString();
-
-  const pulse = () => {
-    gsap.killTweensOf(this.timerText.scale);
-    gsap.killTweensOf(this.timerText);
-
-    this.timerText.scale.set(1);
-
-    gsap.fromTo(
-      this.timerText.scale,
-      { x: 0.6, y: 0.6 },
-      {
-        x: 1.4,
-        y: 1.4,
-        duration: 0.45,
-        ease: "power2.out",
-        yoyo: true,
-        repeat: 1,
-      }
-    );
-
-    gsap.fromTo(
-      this.timerText,
-      { alpha: 0.5 },
-      {
-        alpha: 1,
-        duration: 0.45,
-        yoyo: true,
-        repeat: 1,
-      }
-    );
-  };
-
-  pulse(); // first pulse immediately
-
-  this.countdownInterval = setInterval(() => {
-    remaining--;
-
-    if (remaining <= 0) {
-      clearInterval(this.countdownInterval);
-
-      gsap.to(this.timerText, {
-        scale: 2,
-        alpha: 0,
-        duration: 0.5,
-        ease: "power3.out",
-        onComplete: () => {
-          this.timerText.visible = false;
-          this.timerText.scale.set(1);
-          this.timerText.alpha = 1;
-        },
-      });
-
-    } else {
-      this.timerText.text = remaining.toString();
-      pulse();
-    }
-  }, 1000);
-}
   crashPlane(rate: number) {
     this.isCrashed = true;
     this.cloudsActive = false;
-this.multiplierText.style.fill = 0xff0000
+
     gsap.killTweensOf(this.bg);
     gsap.killTweensOf(this.bg.scale);
 

@@ -430,15 +430,14 @@ else {
 
   if (reachedCruise) {
 
-  // const t = performance.now() * 0.003;
+    const t = performance.now() * 0.003;
 
-  // this.plane.rotation =
-  //   -0.45 +
-  //   Math.sin(t) * 0.04 +
-  //   Math.sin(t * 3) * 0.015;
+    this.plane.rotation =
+      -0.45 +
+      Math.sin(t) * 0.04 +
+      Math.sin(t * 3) * 0.015;
 
-  this.plane.rotation = -0.45; // fixed stable cruise angle
-} else {
+  } else {
     this.plane.rotation = -targetRotation;
   }
 
@@ -452,8 +451,8 @@ else {
     clearInterval(this.countdownInterval);
   }
 
-  this.timerText.visible = true;
-  this.timerText.style.fill=0x22222;
+  this.timerText.visible = true;\
+  this.timer
 
   let remaining = seconds;
   this.timerText.text = remaining.toString();
