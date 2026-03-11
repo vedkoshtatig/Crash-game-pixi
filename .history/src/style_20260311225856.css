@@ -1,0 +1,219 @@
+body {
+  margin: 0;
+  background: #1b1b1b;
+}
+@font-face {
+  font-family: "StarShield";
+  src: url("/fonts/StarShield-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+#app {
+  width: 100%;
+  height: 100vh;
+}
+
+/* ⭐ THIS becomes layout root */
+#pixi-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ⭐ canvas fills container */
+#pixi-container canvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* ⭐ UI glass layer */
+#ui-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ⭐ actual card */
+.bet-panel-wrapper {
+  position: absolute;
+  display: flex;
+  justify-content: center; /* ⭐ center when single */
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.bet-card-ui {
+  width: 520px;
+  height: 150px;
+
+  border-radius: 26px;
+
+  /* ⭐ inner safe padding */
+  padding:14px 20px;   /* was 20px 26px */
+  gap:10px;            /* was 14px */
+  box-sizing: border-box;
+
+  background: linear-gradient(180deg, #1a1b1f, #121317);
+
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 10px 30px rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  flex-direction: column;
+
+  /* ⭐ PERFECT vertical distribution */
+  justify-content: center;
+
+  /* ⭐ horizontal centering */
+  align-items: center;
+
+
+
+  color: white;
+  font-family: Inter, sans-serif;
+}
+
+/* TOP SWITCH */
+.bc-top-switch{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  margin-bottom:2px;   /* small breathing */
+}
+
+.bc-switch-pill{
+  width:180px;          /* ⭐ wider */
+  height:24px;          /* ⭐ taller */
+  padding:3px;
+  border-radius:40px;
+  background:#0c0d10;
+
+  display:flex;
+  gap:4px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+.bc-switch-pill div{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:13px;       /* ⭐ slightly bigger text */
+  border-radius:30px;
+  color:#8c8f96;
+
+  transition:.2s;
+}
+
+.bc-switch-active{
+  background:#2a2c31;
+  color:white;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* MAIN CONTENT */
+.bc-content{
+  width:100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;   /* ⭐ center whole block */
+
+gap:26px;                 /* breathing space */
+}
+
+/* LEFT SIDE */
+.bc-left{
+  display:flex;
+  flex-direction:column;
+  align-items:center;     /* ⭐ center amount + quick buttons */
+  gap:14px;
+}
+
+/* AMOUNT ROW */
+.bc-amount-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.bc-circle {
+    width:30px;
+  height:30px;
+  font-size:16px;
+  border-radius: 50%;
+  background: #2a2c31;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  color: #cfd2d8;
+}
+
+.bc-amount {
+font-size:19px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* QUICK BUTTONS */
+.bc-quick {
+  display: grid;
+  grid-template-columns: repeat(2, 42px);
+  gap:6px;
+}
+
+.bc-quick div {
+  background: #0e0f12;
+ 
+  text-align: center;
+    padding:4px 0;
+  font-size:12px;
+  border-radius:10px;
+  color: #9aa0a8;
+ 
+}
+
+/* GREEN BET BUTTON */
+.bc-bet-btn{
+  width:200px;
+  height:72px;
+
+  border-radius:16px;
+
+  box-shadow:
+    inset 0 0 0 2px rgba(21, 141, 234, 0.952),
+    0 4px 0 #0b1117;
+
+  border:none;
+  cursor:pointer;
+
+  /* ⭐ lighter casino panel tone */
+  background:#0c71ec;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  padding-top:4px;
+}
+
+.bc-bet-title {
+font-size:22px;   /* was 28 */
+  font-weight: 600;
+}
+
+.bc-bet-amt {
+   font-size:14px;   /* was 18 */
+  opacity: 0.9;
+}

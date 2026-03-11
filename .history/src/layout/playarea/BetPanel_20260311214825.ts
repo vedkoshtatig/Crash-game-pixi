@@ -1,0 +1,61 @@
+import { Graphics, Container } from "pixi.js";
+import { app } from "../../main";
+
+export class BetPanel extends Container {
+
+  private bg!: Graphics;
+  private card!: HTMLDivElement;
+
+  constructor() {
+    super();
+
+    this.init();
+    this.createHTML();
+    this.layout();
+
+    window.addEventListener("resize", () => this.layout());
+  }
+
+  init() {
+   
+  }
+
+  createHTML() {
+
+    const ui = document.getElementById("ui-layer")!;
+
+    this.card = document.createElement("div");
+    this.card.className = "bet-card";
+
+    this.card.innerHTML = `
+        <h3>BET</h3>
+        <input type="number" placeholder="Amount" style="width:100%">
+        <button style="margin-top:10px;width:100%">PLACE BET</button>
+    `;
+
+    ui.appendChild(this.card);
+  }
+
+  layout() {
+
+    const { width, height } = app.screen;
+
+    const sidebarWidth = width / 3.6;
+    const headerHeight = height / 18;
+    const betHistoryHeight = height / 18;
+    const flyAreaHeight = height /1.55;
+
+    const y = headerHeight + betHistoryHeight + flyAreaHeight;
+    const panelHeight = height - y;
+
+    this.bg.clear()
+      .roundRect(0,0,width - sidebarWidth,panelHeight,20)
+      .fill(0x0f172a);
+
+    // 🔥 POSITION HTML CARD EXACTLY WITH PIXI PANEL
+    const global = this.getGlobalPosition();
+
+    this.card.style.left = global.x + 20 + "px";
+    this.card.style.top = global.y + 20 + "px";
+  }
+}

@@ -1,0 +1,109 @@
+body{
+  margin:0;
+  background:#1b1b1b;
+}
+
+#app{
+  width:100%;
+  height:100vh;
+}
+
+/* ⭐ THIS becomes layout root */
+#pixi-container{
+  position: relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+
+/* ⭐ canvas fills container */
+#pixi-container canvas{
+  position:absolute;
+  inset:0;
+}
+
+/* ⭐ UI glass layer */
+#ui-layer{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:10;
+}
+
+/* ⭐ actual card */
+.bet-panel-wrapper{
+  position:absolute;
+  display:flex;
+  justify-content:center;   /* ⭐ center when single */
+  align-items:center;
+  gap:20px;
+  padding:20px;
+  box-sizing:border-box;
+}
+
+.bet-card-ui{
+  width:360px;
+  height:150px;
+  background: linear-gradient(180deg,#1c1c1e,#111);
+  border-radius:20px;
+  padding:18px;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  box-shadow: 0 10px 30px rgba(0,0,0,.6);
+}
+
+/* BET MODE SWITCH */
+.bet-mode{
+  background:#0c0c0f;
+  border-radius:30px;
+  padding:4px;
+  display:flex;
+}
+
+.bet-mode button{
+  flex:1;
+  border:none;
+  background:transparent;
+  color:#aaa;
+  padding:6px;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+.bet-mode .active{
+  background:#2a2a2f;
+  color:white;
+}
+
+/* AMOUNT ROW */
+.bet-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+}
+
+.bet-row button{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:none;
+  background:#2b2b30;
+  color:white;
+  font-size:18px;
+}
+
+/* GREEN BUTTON */
+.place-bet{
+  background:#1fbf00;
+  border:none;
+  height:60px;
+  border-radius:16px;
+  font-size:22px;
+  font-weight:600;
+  color:white;
+  cursor:pointer;
+}
+}

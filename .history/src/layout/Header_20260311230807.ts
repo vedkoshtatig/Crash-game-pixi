@@ -1,0 +1,81 @@
+import { Graphics, Text, Container } from "pixi.js";
+import { app } from "../main";
+
+export class Header extends Container {
+
+  private bg!: Graphics;
+  private logo!: Text;
+
+  private balance!: Container;
+  private amount!: Text;
+  private currency!: Text;
+
+  constructor() {
+    super();
+
+    this.init();
+    this.layout();
+
+    window.addEventListener("resize", () => this.layout());
+  }
+
+  init() {
+
+    // background
+    this.bg = new Graphics();
+
+    // logo
+    this.logo = new Text({
+  text: "SkyRush",
+  style: {
+    fontFamily: "Star Shield",
+    fontSize: 40,
+    fill: "#0db6ee",
+    fontWeight: "normal",
+    letterSpacing: 2
+  }
+});
+    // balance container
+    this.balance = new Container();
+
+    this.amount = new Text({
+      text: "30000",
+      style: {
+    fill: "#ffffff"
+      }
+    });
+
+    this.currency = new Text({
+      text: "USD",
+      style:{
+        fill: "#ffffff",
+        font
+      }
+    });
+
+    this.balance.addChild(this.amount, this.currency);
+
+    this.addChild(this.bg, this.logo, this.balance);
+   
+  }
+
+ layout() {
+
+  const { width, height } = app.screen;
+  const headerHeight = height / 18;
+
+  this.bg.clear()
+    .rect(0, 0, width, headerHeight)
+   .fill(0x121821);
+
+  this.logo.position.set(20, headerHeight / 2 - this.logo.height / 2);
+
+  this.amount.position.set(0, 0);
+  this.currency.position.set(this.amount.width + 6, 0);
+
+  this.balance.position.set(
+    width - this.balance.width - 20,
+    headerHeight / 2 - this.balance.height / 2
+  );
+}
+}
