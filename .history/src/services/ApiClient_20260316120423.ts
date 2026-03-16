@@ -38,8 +38,8 @@ export class ApiClient {
     return this.request("/crash-game/place-bet-crash-game", {
       method: "POST",
       body: JSON.stringify({
-        betAmount,
-        autoRate:2,
+        betAmount:1,
+        autoRate:1,
         currencyCode: "USD",
       }),
     });

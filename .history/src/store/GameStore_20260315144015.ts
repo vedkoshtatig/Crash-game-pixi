@@ -1,5 +1,4 @@
 import { ApiClient } from "../services/ApiClient";
-import { getAuthToken } from "../services/getAuthtoken";
 export type GamePhase =
   | "IDLE"
   | "WAITING"
@@ -32,7 +31,7 @@ export class CrashGameStore {
   private listeners: (() => void)[] = [];
 
   private constructor() {
-    const token = getAuthToken();
+    const token = this.getTokenFromUrl();
 
     console.log("TOKEN =", token);
 
@@ -46,18 +45,10 @@ export class CrashGameStore {
     return this._instance;
   }
   private getTokenFromUrl(): string | null {
-
-  const params = new URLSearchParams(window.location.search);
-
-  const token = params.get("token");
-
-  if (token) {
-    return token;
+    if()
+    const params = new URLSearchParams(window.location.search);
+    return params.get("token");
   }
-
-  // fallback
-  return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-}
   //  CONTROLLER PHASE AUTHORITY
   setPhase(next: GamePhase) {
     this.phase = next;

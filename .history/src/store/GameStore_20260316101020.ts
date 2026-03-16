@@ -1,5 +1,4 @@
 import { ApiClient } from "../services/ApiClient";
-import { getAuthToken } from "../services/getAuthtoken";
 export type GamePhase =
   | "IDLE"
   | "WAITING"
@@ -32,7 +31,7 @@ export class CrashGameStore {
   private listeners: (() => void)[] = [];
 
   private constructor() {
-    const token = getAuthToken();
+    const token = this.getTokenFromUrl();
 
     console.log("TOKEN =", token);
 
@@ -123,20 +122,30 @@ export class CrashGameStore {
 
   //  ROUND MUTATIONS (called by controller)
 
-  onRoundWaiting() {
-    this.multiplier = 1;
-    this.hasCashedOut = false;
-    this.winAmount = 0;
+ async onRoundWaiting() {
 
-    if (this.scheduledBet) {
-      this.currentRoundBet = this.betAmount;
-      this.balance -= this.currentRoundBet;
-      this.hasBet = true;
-      this.scheduledBet = false;
+  this.multiplier = 1
+  this.hasCashedOut = false
+  this.winAmount = 0
+
+  if (this.scheduledBet) {
+
+    try {
+      const res = await this.api.placeBet(this.betAmount)
+
+      this.hasBet = true
+      this.currentRoundBet = this.betAmount
+      this.scheduledBet = false
+
+      console.log("AUTO BET SUCCESS", res)
+
+    } catch (e) {
+      console.log("AUTO BET FAILED", e)
     }
-
-    this.notify();
   }
+
+  this.notify()
+}
 
   startFlying() {
     this.multiplier = 1;
@@ -179,7 +188,7 @@ export class CrashGameStore {
       this.hasCashedOut = true;
       this.winAmount = res.winningAmount;
 
-      this.setPhase("CASHED_OUT");
+      this.setPsetPhase("CASHED_OUT");
 
       console.log("CASHOUT SUCCESS", res);
 

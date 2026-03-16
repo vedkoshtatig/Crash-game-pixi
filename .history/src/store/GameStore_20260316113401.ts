@@ -66,28 +66,15 @@ export class CrashGameStore {
 
   //  USER ACTIONS
 
- async placeBet() {
-
-  // ⭐ CASE 1 → waiting → real API bet
-  if (this.phase === "WAITING") {
-
-    if (this.hasBet) return;
-
-    try {
-      const res = await this.api.placeBet(this.betAmount);
-
-      this.hasBet = true;
-      this.currentRoundBet = this.betAmount;
-
-      console.log("BET SUCCESS", res);
-
-      this.notify();
-    } catch (e) {
-      console.log("BET FAILED", e);
-    }
-
-    return;
-  }
+ async placeBet(amount: number) {
+  return this.request("/crash-game/place-bet-crash-game", {
+    method: "POST",
+    body: JSON.stringify({
+      amount: amount,
+      autoRate: 0   // ⭐ IMPORTANT → send default auto cashout
+    }),
+  });
+}
 
   // ⭐ CASE 2 → not waiting → schedule
   if (!this.hasBet) {

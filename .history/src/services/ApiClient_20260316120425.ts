@@ -39,7 +39,7 @@ export class ApiClient {
       method: "POST",
       body: JSON.stringify({
         betAmount,
-        autoRate:2,
+        autoRate:1,
         currencyCode: "USD",
       }),
     });

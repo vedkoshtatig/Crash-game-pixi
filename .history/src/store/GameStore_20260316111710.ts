@@ -177,7 +177,7 @@ export class CrashGameStore {
       const res = await this.api.cashOut();
 
       this.hasCashedOut = true;
-      this.winAmount = res.winningAmount;
+      this.winAmount = res?.winningAmount;
 
       this.setPhase("CASHED_OUT");
 

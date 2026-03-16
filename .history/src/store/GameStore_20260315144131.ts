@@ -1,5 +1,4 @@
 import { ApiClient } from "../services/ApiClient";
-import { getAuthToken } from "../services/getAuthtoken";
 export type GamePhase =
   | "IDLE"
   | "WAITING"
@@ -32,7 +31,7 @@ export class CrashGameStore {
   private listeners: (() => void)[] = [];
 
   private constructor() {
-    const token = getAuthToken();
+    const token = this.getTokenFromUrl();
 
     console.log("TOKEN =", token);
 
@@ -46,18 +45,14 @@ export class CrashGameStore {
     return this._instance;
   }
   private getTokenFromUrl(): string | null {
-
-  const params = new URLSearchParams(window.location.search);
-
-  const token = params.get("token");
-
-  if (token) {
-    return token;
+    const params = new URLSearchParams(window.location.search);
+    if(params!==null){
+      return params.get("token");
+    }else{
+     return ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwOCIsImVtYWlsIjoiYWxpc2FqaWRtZDZAZ21haWwuY29tIiwidXNlck5hbWUiOiJzYWppZGNhc20iLCJzZXNzaW9uSWQiOiI4ZWVlN2MzMi0wZGM1LTRhZGUtODg5OC1kNDgwY2YxYmI5MzciLCJkZXZpY2VJZCI6IjJlZTI2ZThmLTNlMDQtNGM0NC1iMWE3LTg1Y2YyZTY3YjY2ZCIsImlhdCI6MTc3MzU2NTIzNSwiZXhwIjoxNzc0MTcwMDM1fQ.JveUNrbXwYhZCByv6y-aciPQGGoz_Kja5FoWTJ7iGI8")
+    }
+    
   }
-
-  // fallback
-  return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
-}
   //  CONTROLLER PHASE AUTHORITY
   setPhase(next: GamePhase) {
     this.phase = next;

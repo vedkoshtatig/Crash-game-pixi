@@ -32,11 +32,11 @@ export class CrashGameStore {
   private listeners: (() => void)[] = [];
 
   private constructor() {
-    const token = getAuthToken();
+    const token = this.getTokenFromUrl();
 
     console.log("TOKEN =", token);
 
-    this.api = new ApiClient(token);
+    this.api = new ApiClient(getAuthToke);
   }
 
   public static get instance() {

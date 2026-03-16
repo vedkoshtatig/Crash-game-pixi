@@ -36,7 +36,7 @@ export class CrashGameStore {
 
     console.log("TOKEN =", token);
 
-    this.api = new ApiClient(token);
+    this.api = new ApiClient(toeknh);
   }
 
   public static get instance() {

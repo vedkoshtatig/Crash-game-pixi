@@ -1,5 +1,4 @@
 import { ApiClient } from "../services/ApiClient";
-import { getAuthToken } from "../services/getAuthtoken";
 export type GamePhase =
   | "IDLE"
   | "WAITING"
@@ -32,7 +31,7 @@ export class CrashGameStore {
   private listeners: (() => void)[] = [];
 
   private constructor() {
-    const token = getAuthToken();
+    const token = this.getTokenFromUrl();
 
     console.log("TOKEN =", token);
 

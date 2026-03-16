@@ -1,5 +1,4 @@
 import { ApiClient } from "../services/ApiClient";
-import { getAuthToken } from "../services/getAuthtoken";
 export type GamePhase =
   | "IDLE"
   | "WAITING"
@@ -9,7 +8,7 @@ export type GamePhase =
 
 export class CrashGameStore {
   private static _instance: CrashGameStore;
-
+private betLock = false
   public balance = 10000;
   public roundId = 0;
   private api!: ApiClient;
@@ -32,7 +31,7 @@ export class CrashGameStore {
   private listeners: (() => void)[] = [];
 
   private constructor() {
-    const token = getAuthToken();
+    const token = this.getTokenFromUrl();
 
     console.log("TOKEN =", token);
 
@@ -60,40 +59,54 @@ export class CrashGameStore {
 }
   //  CONTROLLER PHASE AUTHORITY
   setPhase(next: GamePhase) {
-    this.phase = next;
-    this.notify();
+
+  const allowed: Record<GamePhase, GamePhase[]> = {
+    IDLE: ["WAITING"],
+    WAITING: ["FLYING"],
+    FLYING: ["CRASHED", "CASHED_OUT"],
+    CASHED_OUT: ["CRASHED", "WAITING"],
+    CRASHED: ["WAITING"]
   }
+
+  if (!allowed[this.phase].includes(next)) {
+    console.warn(`Illegal phase transition ${this.phase} → ${next}`)
+    return
+  }
+
+  this.phase = next
+  this.notify()
+}
 
   //  USER ACTIONS
 
- async placeBet() {
+async placeBet() {
 
-  // ⭐ CASE 1 → waiting → real API bet
+  if (this.betLock) return
+
   if (this.phase === "WAITING") {
 
-    if (this.hasBet) return;
+    if (this.hasBet) return
+
+    this.betLock = true
 
     try {
-      const res = await this.api.placeBet(this.betAmount);
+      const res = await this.api.placeBet(this.betAmount)
 
-      this.hasBet = true;
-      this.currentRoundBet = this.betAmount;
+      this.hasBet = true
+      this.currentRoundBet = this.betAmount
 
-      console.log("BET SUCCESS", res);
-
-      this.notify();
     } catch (e) {
-      console.log("BET FAILED", e);
+      console.log("BET FAILED", e)
     }
 
-    return;
+    this.betLock = false
+    this.notify()
+    return
   }
 
-  // ⭐ CASE 2 → not waiting → schedule
   if (!this.hasBet) {
-    this.scheduledBet = true;
-    console.log("BET SCHEDULED");
-    this.notify();
+    this.scheduledBet = true
+    this.notify()
   }
 }
   async cancelBet() {
@@ -123,20 +136,34 @@ export class CrashGameStore {
 
   //  ROUND MUTATIONS (called by controller)
 
-  onRoundWaiting() {
-    this.multiplier = 1;
-    this.hasCashedOut = false;
-    this.winAmount = 0;
+ async onRoundWaiting() {
+this.crashPoint = 0
 
-    if (this.scheduledBet) {
-      this.currentRoundBet = this.betAmount;
-      this.balance -= this.currentRoundBet;
-      this.hasBet = true;
-      this.scheduledBet = false;
+  this.multiplier = 1
+  this.hasCashedOut = false
+  this.winAmount = 0
+if (!this.scheduledBet) {
+  this.hasBet = false
+  this.currentRoundBet = 0
+}
+  if (this.scheduledBet) {
+
+    try {
+      const res = await this.api.placeBet(this.betAmount)
+
+      this.hasBet = true
+      this.currentRoundBet = this.betAmount
+      this.scheduledBet = false
+
+      console.log("AUTO BET SUCCESS", res)
+
+    } catch (e) {
+      console.log("AUTO BET FAILED", e)
     }
-
-    this.notify();
   }
+
+  this.notify()
+}
 
   startFlying() {
     this.multiplier = 1;
@@ -153,18 +180,19 @@ export class CrashGameStore {
     this.notify();
   }
 
-  crash() {
-    if (!this.hasCashedOut && this.hasBet) {
-      this.winAmount = 0;
-    }
+ crash() {
 
-    this.addHistory(this.crashPoint);
-
-    this.hasBet = false;
-    this.multiplier = 1;
-
-    this.notify();
+  if (!this.hasCashedOut && this.hasBet) {
+    this.winAmount = 0
   }
+
+  this.addHistory(this.crashPoint)
+
+  this.hasBet = false
+  this.multiplier = this.crashPoint
+
+  this.notify()
+}
 
   //  PLAYER DRIVEN TRANSITION
 
