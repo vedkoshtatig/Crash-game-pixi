@@ -49,23 +49,16 @@ export class BetPanel extends Container {
 
      if (s.hasBet) {
    title.textContent = "Cancel"
-    amt.textContent = s.currentRoundBet.toFixed(2) + " USD"
    btn.onclick = () => s.cancelBet()
 }
 else if (s.scheduledBet) {
    title.textContent = "Cancel"
-   amt.textContent = "Waiting next round"
    btn.onclick = () => s.cancelScheduledBet()
-}
-else {
-   title.textContent = "Bet"
-       amt.textContent = s.betAmount.toFixed(2) + " USD"
-   btn.onclick = () => s.placeBet()
 }
     }
 
     //  FLYING
-   else if (s.phase === "FLYING") {
+    else if (s.phase === "FLYING") {
 
   if (s.hasBet && !s.hasCashedOut) {
 
@@ -82,15 +75,15 @@ else {
     if (s.scheduledBet) {
       title.textContent = "Cancel"
       amt.textContent = "Waiting next round"
-      btn.onclick = () => s.cancelScheduledBet()
-    } else {
+      btn.onclick = () => s.cancelScheduledBet()   // ⭐ FIX
+    } 
+    else {
       title.textContent = "Bet"
       amt.textContent = s.betAmount.toFixed(2) + " USD"
-      btn.onclick = () => s.scheduleBet()
+      btn.onclick = () => s.placeBet()
     }
   }
 }
-
     //  CRASHED
     else if (s.phase === "CRASHED") {
 
@@ -276,6 +269,7 @@ else {
     q.addEventListener("click", () => {
       const val = Number(q.getAttribute("data-val"));
       this.store.setBetAmount(val);
+      console.log(this.store.betAmount);
     });
   });
 }

@@ -66,7 +66,7 @@ export class FlyArea extends Container {
     this.init();
     this.layout();
     this.initEvents();
-    this.createClouds();
+    // this.createClouds();
 
     app.ticker.add(this.update, this);
   }

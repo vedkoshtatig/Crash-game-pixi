@@ -69,17 +69,13 @@ export class CrashGameStore {
 
     this.hasBet = true
     this.currentRoundBet = this.betAmount
-    this.scheduledBet=false
+
     console.log("BET SUCCESS", res)
 
-  
+    this.notify()
   } catch (e) {
     console.log("BET FAILED", e)
-    this.scheduledBet = false   // remove ghost waiting UI
-    this.hasBet = false
-    this.currentRoundBet = 0
   }
-  this.notify()
 }
 scheduleBet() {
   if (this.hasBet) return
@@ -128,20 +124,20 @@ cancelScheduledBet() {
 
   //  ROUND MUTATIONS (called by controller)
 
- async onRoundWaiting() {
+  onRoundWaiting() {
+    this.multiplier = 1;
+    this.hasCashedOut = false;
+    this.winAmount = 0;
 
-  this.multiplier = 1
-  this.hasCashedOut = false
-  this.winAmount = 0
+    if (this.scheduledBet) {
+      this.currentRoundBet = this.betAmount;
+      this.balance -= this.currentRoundBet;
+      this.hasBet = true;
+      this.scheduledBet = false;
+    }
 
-  // ⭐ AUTO REAL BET TRIGGER
-  if (this.scheduledBet) {
-    
-    await this.placeBet()
+    this.notify();
   }
-
-  this.notify()
-}
 
   startFlying() {
     this.multiplier = 1;

@@ -128,7 +128,7 @@ export class FlyArea extends Container {
     this.world.x = (w - this.WORLD_WIDTH * scale) / 2;
     this.world.y = (h - this.WORLD_HEIGHT * scale) / 2;
 
-    //  create mask
+    // ⭐ create mask
     if (!this.viewportMask) {
       this.viewportMask = Sprite.from(Texture.WHITE);
       this.addChild(this.viewportMask);

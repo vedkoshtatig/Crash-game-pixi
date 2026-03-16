@@ -49,7 +49,6 @@ export class BetPanel extends Container {
 
      if (s.hasBet) {
    title.textContent = "Cancel"
-    amt.textContent = s.currentRoundBet.toFixed(2) + " USD"
    btn.onclick = () => s.cancelBet()
 }
 else if (s.scheduledBet) {
@@ -59,37 +58,36 @@ else if (s.scheduledBet) {
 }
 else {
    title.textContent = "Bet"
-       amt.textContent = s.betAmount.toFixed(2) + " USD"
    btn.onclick = () => s.placeBet()
 }
     }
 
     //  FLYING
-   else if (s.phase === "FLYING") {
+    else if (s.phase === "FLYING") {
 
-  if (s.hasBet && !s.hasCashedOut) {
+      if (s.hasBet && !s.hasCashedOut) {
 
-    btn.className = "bc-bet-btn bc-state-cashout"
-    title.textContent = "Cashout"
-    amt.textContent = s.liveWinAmount.toFixed(2) + " USD"
+        btn.className = "bc-bet-btn bc-state-cashout"
+        title.textContent = "Cashout"
+        amt.textContent = s.liveWinAmount.toFixed(2) + " USD"
 
-    btn.onclick = () => s.cashOut()
+        btn.onclick = () => s.cashOut()
 
-  } else {
+      } else {
 
-    btn.className = "bc-bet-btn bc-state-bet"
+        btn.className = "bc-bet-btn bc-state-bet"
 
-    if (s.scheduledBet) {
-      title.textContent = "Cancel"
-      amt.textContent = "Waiting next round"
-      btn.onclick = () => s.cancelScheduledBet()
-    } else {
-      title.textContent = "Bet"
-      amt.textContent = s.betAmount.toFixed(2) + " USD"
-      btn.onclick = () => s.scheduleBet()
+        if (s.scheduledBet) {
+          title.textContent = "Cancel"
+          amt.textContent = "Waiting next round"
+          btn.onclick = () => s.cancelBet()
+        } else {
+          title.textContent = "Bet"
+          amt.textContent = s.betAmount.toFixed(2) + " USD"
+          btn.onclick = () => s.placeBet()
+        }
+      }
     }
-  }
-}
 
     //  CRASHED
     else if (s.phase === "CRASHED") {

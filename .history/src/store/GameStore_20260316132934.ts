@@ -136,7 +136,7 @@ cancelScheduledBet() {
 
   // ⭐ AUTO REAL BET TRIGGER
   if (this.scheduledBet) {
-    
+    this.scheduledBet = false
     await this.placeBet()
   }
 

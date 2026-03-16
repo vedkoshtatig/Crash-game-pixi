@@ -59,7 +59,6 @@ else if (s.scheduledBet) {
 }
 else {
    title.textContent = "Bet"
-       amt.textContent = s.betAmount.toFixed(2) + " USD"
    btn.onclick = () => s.placeBet()
 }
     }

@@ -55,43 +55,57 @@ export class CrashGameStore {
   //  USER ACTIONS
 
  async placeBet() {
+async placeBet() {
 
-  // REAL BET ONLY IN WAITING
-  if (this.phase !== "WAITING") {
-    this.scheduleBet()
-    return
+  console.log("PHASE =", this.phase)
+
+  // ⭐ CASE 1 → waiting → real API bet
+  if (this.phase === "WAITING") {
+
+    if (this.hasBet) return;
+
+    try {
+      const res = await this.api.placeBet(this.betAmount);
+
+      this.hasBet = true;
+      this.currentRoundBet = this.betAmount;
+
+      console.log("BET SUCCESS", res);
+
+      this.notify();
+    } catch (e) {
+      console.log("BET FAILED", e);
+    }
+
+    return;
   }
 
-  if (this.hasBet) return
-
-  try {
-    const res = await this.api.placeBet(this.betAmount)
-
-    this.hasBet = true
-    this.currentRoundBet = this.betAmount
-    this.scheduledBet=false
-    console.log("BET SUCCESS", res)
-
-  
-  } catch (e) {
-    console.log("BET FAILED", e)
-    this.scheduledBet = false   // remove ghost waiting UI
-    this.hasBet = false
-    this.currentRoundBet = 0
+  // ⭐ CASE 2 → not waiting → schedule
+  if (!this.hasBet) {
+    this.scheduledBet = true;
+    console.log("BET SCHEDULED");
+    this.notify();
   }
-  this.notify()
 }
-scheduleBet() {
-  if (this.hasBet) return
-  if (this.scheduledBet) return
+  async cancelBet() {
+    if (this.phase !== "WAITING") return;
+    if (!this.hasBet) return;
 
-  this.scheduledBet = true
+    try {
+      await this.api.cancelBet();
 
-  console.log("BET SCHEDULED CLIENT SIDE")
+      this.hasBet = false;
+      this.currentRoundBet = 0;
 
-  this.notify()
-}
+      console.log("BET CANCELLED");
+
+      this.notify();
+    } catch (e) {
+      console.log("CANCEL FAILED", e);
+    }
+  }
 cancelScheduledBet() {
+
   if (!this.scheduledBet) return
 
   this.scheduledBet = false
@@ -100,25 +114,6 @@ cancelScheduledBet() {
 
   this.notify()
 }
-  async cancelBet() {
-
-  if (this.phase !== "WAITING") return
-  if (!this.hasBet) return
-
-  try {
-    await this.api.cancelBet()
-
-    this.hasBet = false
-    this.currentRoundBet = 0
-
-    console.log("REAL BET CANCELLED")
-
-    this.notify()
-  } catch (e) {
-    console.log("CANCEL FAILED", e)
-  }
-}
-
   setBetAmount(v: number) {
     if (this.hasBet) return;
 
@@ -134,10 +129,26 @@ cancelScheduledBet() {
   this.hasCashedOut = false
   this.winAmount = 0
 
-  // ⭐ AUTO REAL BET TRIGGER
+  // ⭐ AUTO PLACE SCHEDULED BET
   if (this.scheduledBet) {
-    
-    await this.placeBet()
+
+    try {
+
+      const res = await this.api.placeBet(this.betAmount)
+
+      this.currentRoundBet = this.betAmount
+      this.hasBet = true
+      this.scheduledBet = false
+
+      console.log("AUTO BET SUCCESS", res)
+
+    } catch (e) {
+
+      console.log("AUTO BET FAILED", e)
+
+      // ⭐ IMPORTANT
+      this.scheduledBet = false
+    }
   }
 
   this.notify()

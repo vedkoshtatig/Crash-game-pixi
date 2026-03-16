@@ -49,7 +49,6 @@ export class BetPanel extends Container {
 
      if (s.hasBet) {
    title.textContent = "Cancel"
-    amt.textContent = s.currentRoundBet.toFixed(2) + " USD"
    btn.onclick = () => s.cancelBet()
 }
 else if (s.scheduledBet) {
@@ -59,7 +58,6 @@ else if (s.scheduledBet) {
 }
 else {
    title.textContent = "Bet"
-       amt.textContent = s.betAmount.toFixed(2) + " USD"
    btn.onclick = () => s.placeBet()
 }
     }

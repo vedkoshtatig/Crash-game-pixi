@@ -72,7 +72,7 @@ export class CrashGameStore {
     this.scheduledBet=false
     console.log("BET SUCCESS", res)
 
-  
+    this.notify()
   } catch (e) {
     console.log("BET FAILED", e)
     this.scheduledBet = false   // remove ghost waiting UI
@@ -136,7 +136,7 @@ cancelScheduledBet() {
 
   // ⭐ AUTO REAL BET TRIGGER
   if (this.scheduledBet) {
-    
+    this.scheduledBet = false
     await this.placeBet()
   }
 

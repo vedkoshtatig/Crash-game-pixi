@@ -69,17 +69,13 @@ export class CrashGameStore {
 
     this.hasBet = true
     this.currentRoundBet = this.betAmount
-    this.scheduledBet=false
+    this.scheduleBet=false
     console.log("BET SUCCESS", res)
 
-  
+    this.notify()
   } catch (e) {
     console.log("BET FAILED", e)
-    this.scheduledBet = false   // remove ghost waiting UI
-    this.hasBet = false
-    this.currentRoundBet = 0
   }
-  this.notify()
 }
 scheduleBet() {
   if (this.hasBet) return
@@ -136,7 +132,7 @@ cancelScheduledBet() {
 
   // ⭐ AUTO REAL BET TRIGGER
   if (this.scheduledBet) {
-    
+    this.scheduledBet = false
     await this.placeBet()
   }
 
