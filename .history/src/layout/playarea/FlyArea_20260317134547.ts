@@ -218,27 +218,20 @@ this.skyOverlay
   }
 
   // ⭐ SKY UPDATE MUST BE HERE (independent)
- if (this.skyAnimating) {
+  if (this.skyAnimating) {
 
-  // ⭐ EXACT SAME TIME DRIVER AS PLANE
-  const time = this.serverTime;
 
-  // how fast sky darkens (tweak this)
-  const DARKEN_SPEED = 0.03;
-
-  // ⭐ continuous deterministic progress
-  const t = Math.min(time * DARKEN_SPEED, 1);
 
   const start = 0x00aaff;
-  const mid   = 0x0066cc;
-  const end   = 0x000f3d;
+  const mid   = 0x0066CC;
+  const end   = 0x000F3D;
 
   let color;
 
-  if (t < 0.6) {
-    color = this.lerpColor(start, mid, t / 0.6);
+  if (this.skyState.t < 0.6) {
+    color = this.lerpColor(start, mid, this.skyState.t / 0.6);
   } else {
-    color = this.lerpColor(mid, end, (t - 0.6) / 0.4);
+    color = this.lerpColor(mid, end, (this.skyState.t - 0.6) / 0.4);
   }
 
   this.skyOverlay
@@ -399,11 +392,11 @@ private lerpColor(a: number, b: number, t: number) {
     this.plane.texture = this.runTexture;
     this.multiplierText.text = multiplier.toFixed(2) + "x";
 
-    const maxX = this.flyWidth -350;
-    const maxY = 420;
+    const maxX = this.flyWidth -110;
+    const maxY = 300;
     const runwayTime = 0.4;
 
-    const x = Math.min(this.startX + time * 900, maxX);
+    const x = Math.min(this.startX + time * 950, maxX);
     const reachedCruise = x >= maxX;
     if (!this.zoomTriggered && x >= this.flyWidth * 0.25) {
       this.zoomTriggered = true;

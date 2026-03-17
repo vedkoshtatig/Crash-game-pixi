@@ -403,7 +403,7 @@ private lerpColor(a: number, b: number, t: number) {
     const maxY = 420;
     const runwayTime = 0.4;
 
-    const x = Math.min(this.startX + time * 900, maxX);
+    const x = Math.min(this.startX + time * 950, maxX);
     const reachedCruise = x >= maxX;
     if (!this.zoomTriggered && x >= this.flyWidth * 0.25) {
       this.zoomTriggered = true;

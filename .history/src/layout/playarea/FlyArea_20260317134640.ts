@@ -224,7 +224,7 @@ this.skyOverlay
   const time = this.serverTime;
 
   // how fast sky darkens (tweak this)
-  const DARKEN_SPEED = 0.03;
+  const DARKEN_SPEED = 0.05;
 
   // ⭐ continuous deterministic progress
   const t = Math.min(time * DARKEN_SPEED, 1);
@@ -399,11 +399,11 @@ private lerpColor(a: number, b: number, t: number) {
     this.plane.texture = this.runTexture;
     this.multiplierText.text = multiplier.toFixed(2) + "x";
 
-    const maxX = this.flyWidth -350;
-    const maxY = 420;
+    const maxX = this.flyWidth -110;
+    const maxY = 300;
     const runwayTime = 0.4;
 
-    const x = Math.min(this.startX + time * 900, maxX);
+    const x = Math.min(this.startX + time * 950, maxX);
     const reachedCruise = x >= maxX;
     if (!this.zoomTriggered && x >= this.flyWidth * 0.25) {
       this.zoomTriggered = true;
