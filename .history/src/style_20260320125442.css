@@ -1,0 +1,176 @@
+/* ---------- UI ROOT LAYER ---------- */
+
+#ui-layer{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:10;
+}
+
+/* ---------- PANEL WRAPPER (positioned by Pixi) ---------- */
+
+.bet-panel-wrapper{
+  position:absolute;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:12px;
+  box-sizing:border-box;
+  z-index:40;
+}
+
+/* ---------- CARD ---------- */
+
+.bet-card-ui{
+  width:100%;
+  height:100%;
+  pointer-events:auto;
+
+  border-radius:20px;
+  background:linear-gradient(180deg,#1a1b1f,#121317);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.05),
+    0 10px 30px rgba(0,0,0,.6);
+
+  display:flex;
+  flex-direction:column;
+  padding:14px;
+  box-sizing:border-box;
+
+  color:white;
+  font-family:Inter, sans-serif;
+}
+
+/* ---------- MAIN LAYOUT ---------- */
+
+.bc-main{
+  flex:1;
+  display:flex;
+  gap:14px;
+}
+
+/* ---------- BET BUTTON ---------- */
+
+.bc-bet-btn{
+  flex:1;
+  border-radius:18px;
+  border:none;
+  cursor:pointer;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  background:#0c71ec;
+
+  box-shadow:
+    inset 0 0 0 2px rgba(21,141,234,.9),
+    0 4px 0 #0b1117;
+}
+
+.bc-bet-title{
+  font-size:22px;
+  font-weight:600;
+}
+
+.bc-bet-amt{
+  font-size:14px;
+  opacity:.9;
+}
+
+/* ---------- STATES ---------- */
+
+.bc-state-cashout{
+  background:linear-gradient(180deg,#19c37d,#11945f);
+  box-shadow:
+    0 0 18px rgba(25,195,125,.5),
+    inset 0 0 0 2px rgba(255,255,255,.15);
+}
+
+.bc-state-disabled{
+  background:#141519;
+  opacity:.7;
+  cursor:default;
+}
+
+/* ---------- SIDE CONTROLS ---------- */
+
+.bc-side{
+  width:110px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:10px;
+}
+
+.bc-amount-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.bc-circle{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  background:#2a2c31;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.bc-amount{
+  font-size:18px;
+  font-weight:600;
+}
+
+.bc-quick{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+
+.bc-q{
+  background:#0e0f12;
+  border-radius:8px;
+  text-align:center;
+  padding:4px 0;
+  font-size:12px;
+  cursor:pointer;
+}
+
+/* ---------- BOTTOM AUTO ---------- */
+
+.bc-bottom{
+  margin-top:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.bc-switch-pill{
+  width:44px;
+  height:22px;
+  border-radius:20px;
+  background:#2a2c31;
+  position:relative;
+  cursor:pointer;
+}
+
+.bc-switch-highlight{
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:#19c37d;
+  transition:.25s;
+}
+
+.bc-auto-active .bc-switch-highlight{
+  transform:translateX(22px);
+}
