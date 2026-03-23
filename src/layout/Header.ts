@@ -9,6 +9,7 @@ private store = CrashGameStore.instance;
   private balance!: Container;
   public amount!: Text;
   private currency!: Text;
+  private resizeRaf = 0;
 
   constructor() {
     super();
@@ -16,7 +17,15 @@ private store = CrashGameStore.instance;
     this.init();
     this.layout();
 this.store.subscribe(() => this.updateFromStore());
-    window.addEventListener("resize", () => this.layout());
+    app.renderer.on("resize", this.onRendererResize, this);
+  }
+
+  private onRendererResize() {
+    if (this.resizeRaf) cancelAnimationFrame(this.resizeRaf);
+    this.resizeRaf = requestAnimationFrame(() => {
+      this.resizeRaf = 0;
+      this.layout();
+    });
   }
 
   init() {

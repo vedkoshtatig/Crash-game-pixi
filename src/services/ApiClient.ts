@@ -52,8 +52,11 @@ export class ApiClient {
   }
 
   cashOut() {
-    return this.request("/crash-game/player-escape-crashGame", {
+    return this.request<{ data: { winningAmount: number } }>(
+      "/crash-game/player-escape-crashGame",
+      {
       method: "POST",
-    });
+      }
+    );
   }
 }

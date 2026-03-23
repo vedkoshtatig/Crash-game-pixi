@@ -1,12 +1,8 @@
 import { Graphics, Container, Ticker } from "pixi.js";
-import { app } from "../../main";
 import { CrashGameStore } from "../../store/GameStore";
-import { Header } from "../Header";
 export class BetPanel extends Container {
   private bg!: Graphics;
-  private card!: HTMLDivElement;
   private store = CrashGameStore.instance;
-  private betAmount = 1;
   private panelWidth = 0;
 private panelHeight = 0;
 
@@ -252,7 +248,6 @@ card.style.flexShrink = "0";
     // ✅ NOW query after HTML exists
     const betTab = card.querySelector(".bc-tab-bet") as HTMLElement;
     const autoTab = card.querySelector(".bc-tab-auto") as HTMLElement;
-    const pill = card.querySelector(".bc-switch-pill") as HTMLElement;
 
     betTab.onclick = () => {
       if (this.store.scheduledBet) return;

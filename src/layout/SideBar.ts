@@ -16,6 +16,7 @@ export class SideBar extends Container {
 
   private sidebarWidth: number = 0;
   private panelHeight: number = 0;
+  private resizeRaf = 0;
 
   constructor() {
     super();
@@ -24,7 +25,15 @@ export class SideBar extends Container {
     this.layout();
     this.initEvents();
 
-    window.addEventListener("resize", () => this.layout());
+    app.renderer.on("resize", this.onRendererResize, this);
+  }
+
+  private onRendererResize() {
+    if (this.resizeRaf) cancelAnimationFrame(this.resizeRaf);
+    this.resizeRaf = requestAnimationFrame(() => {
+      this.resizeRaf = 0;
+      this.layout();
+    });
   }
 
   init() {

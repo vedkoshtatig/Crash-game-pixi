@@ -1,9 +1,9 @@
-import { Container, Sprite, Text, Texture, Assets, Graphics } from "pixi.js";
+import { Container, Sprite, Text, Texture, Graphics } from "pixi.js";
 import { app } from "../../main";
 import { gameEvents } from "../../controller/GameController";
 import { gsap } from "gsap";
 import { CrashGameStore } from "../../store/GameStore";
-import { Skeleton, Spine } from "@esotericsoftware/spine-pixi-v8";
+import { Spine } from "@esotericsoftware/spine-pixi-v8";
 // await Assets.load(["/bg.png","/plane-idle.png" , "/plane-run.png" ,"/plane-blast.png","Clouds_01.png"]);
 
 export class FlyArea extends Container {
@@ -22,8 +22,6 @@ export class FlyArea extends Container {
   private bgDrift = false;
   private multiplierText!: Text;
   private timerText!: Text;
-  private bgOffsetX = 0;
-  private bgOffsetY = 0;
   private flyWidth: number = 0;
   private flyHeight: number = 0;
   private takeoffPlayed = false;
@@ -32,15 +30,6 @@ export class FlyArea extends Container {
   private startY: number = 0;
 
   private clouds: Sprite[] = [];
-  private planetTextures = [
-    Texture.from("/Planet1.png"),
-    Texture.from("/Planet2.png"),
-    Texture.from("/Planet3.png"),
-    Texture.from("/Planet4.png"),
-  ];
-
-  private planets: Sprite[] = [];
-  private planetsActive = false;
 
   private isFlying: boolean = false;
   private isCrashed: boolean = false;
@@ -49,9 +38,6 @@ export class FlyArea extends Container {
   private viewHeight: number = 0;
   private placeBetText!: Text;
   private cloudTexture = Texture.from("/Clouds_01.png");
-  private idleTexture = Texture.from("/plane-idle.png");
-  private runTexture = Texture.from("/plane-run.png");
-  private blastTexture = Texture.from("/plane-blast.png");
 
   constructor() {
     super();
@@ -126,12 +112,6 @@ export class FlyArea extends Container {
     );
   }
   public resize(w: number, h: number) {
-    // ⭐ store previous relative offset
-    if (this.flyWidth > 0 && this.flyHeight > 0) {
-      this.bgOffsetX = (this.bg.x - this.flyWidth / 2) / this.flyWidth;
-      this.bgOffsetY = (this.bg.y - this.flyHeight / 2) / this.flyHeight;
-    }
-
     this.viewWidth = w;
     this.viewHeight = h;
 
@@ -223,8 +203,6 @@ export class FlyArea extends Container {
 
       // cinematic acceleration curve
       const speed = 2 + Math.log(mult + 1) * 0.8;
-
-      const horizonY = this.flyHeight * 0.65;
       // ⭐ remember: higher y = LOWER on screen
 
       // ⭐ always move world backward
@@ -298,15 +276,6 @@ export class FlyArea extends Container {
 }
     this.plane.update(dt);
     this.lastUpdate = now;
-  }
-  private resetSky() {
-    this.skyAnimating = false;
-    this.skyState.t = 0;
-
-    this.skyOverlay
-      .clear()
-      .rect(0, 0, this.viewWidth, this.viewHeight)
-      .fill(0x00aaff); // bright start sky
   }
   private lerpColor(a: number, b: number, t: number) {
     const ar = (a >> 16) & 255,
@@ -463,8 +432,6 @@ export class FlyArea extends Container {
     const reachedCruise = x >= maxX;
 
     // ⭐ cloud trigger same timing feel
-    const clampPoint = maxX * 0.92;
-
     if (!this.cloudsActive && time > runwayTime + 0.15) {
       this.cloudsActive = true;
 

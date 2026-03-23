@@ -6,7 +6,6 @@ export class BetHistory extends Container {
   private bg!: Graphics;
   private items: Text[] = [];
 
-  private panelWidth = 0;
   private panelHeight = 0;
 
   private lastHistory: number[] = [];
@@ -51,7 +50,6 @@ private renderHistory(history: number[]) {
     });
 
     const padX = 14;
-    const padY = 6;
 
     const pillW = txt.width + padX * 2;
     const pillH = txt.height;
@@ -96,7 +94,6 @@ private renderHistory(history: number[]) {
 //////
   public resize(width: number, height: number) {
 
-    this.panelWidth = width;
     this.panelHeight = height;
 
     this.layout(width, height);

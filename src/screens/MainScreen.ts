@@ -16,13 +16,22 @@ export class MainScreen extends Container {
   public betPanel!: BetPanel;
   public jet !: Spine
   public spineData : any;
+  private resizeRaf = 0;
   constructor() {
     super();
    
     this.init();
     this.layout();
 
-    window.addEventListener("resize", () => this.layout());
+    app.renderer.on("resize", this.onRendererResize, this);
+  }
+
+  private onRendererResize() {
+    if (this.resizeRaf) cancelAnimationFrame(this.resizeRaf);
+    this.resizeRaf = requestAnimationFrame(() => {
+      this.resizeRaf = 0;
+      this.layout();
+    });
   }
 
   private async init() {

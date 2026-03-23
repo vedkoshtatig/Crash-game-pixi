@@ -3,7 +3,6 @@
 import { Application, Assets } from "pixi.js";
 import { MainScreen } from "./screens/MainScreen";
 import { GameController } from "./controller/GameController";
-import { ApiClient } from "./services/ApiClient";
 import '@esotericsoftware/spine-pixi-v8';
 import "./style.css";
 
