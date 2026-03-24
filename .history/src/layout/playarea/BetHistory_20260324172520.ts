@@ -30,25 +30,25 @@ private leftPadding = 24;
   }
 private getColor(value: number) {
 
-  if (value < 2) {
-    return 0x0b3d91;   // very dark blue
+  if (value < 3) {
+    return 0x2ecc71; // light green
   }
-  else if (value < 5) {
-    return 0x1e5bd9;   // deep blue
+  else if (value < 6) {
+    return 0x27ae60; // medium green
   }
-  else if (value < 7) {
-    return 0x157a6e;   // dark teal green
+  else if (value < 9) {
+    return 0x1abc9c; // green-cyan
   }
   else if (value < 12) {
-    return 0x1abc9c;   // medium aqua
+    return 0x16a085; // teal
   }
   else if (value < 15) {
-    return 0xf39c12;   // warm amber
+    return 0x3498db; // blue
   }
   else {
-    return 0xffe066;   // light golden highlight
+    return 0x2980b9; // deep blue
   }
-this.scale
+
 }
 private renderHistory(history: number[]) {
 
@@ -68,7 +68,7 @@ private renderHistory(history: number[]) {
     const txt = new Text({
       text: value.toFixed(2) + "x",
       style: {
-        fill: 0x222222,
+        fill: 0xffffff,
         fontSize: 18,
         fontWeight: "600"
       }
@@ -83,12 +83,11 @@ private renderHistory(history: number[]) {
 
 const baseColor = this.getColor(value);
 
-    pill.roundRect(0, 0, pillW, pillH, r).fill({ color: baseColor });
-
-pill.roundRect(0, 0, pillW, pillH, r).fill({
-  color: 0xffffff,
-  alpha: 0.08   // subtle glossy overlay
-});
+    pill.roundRect(0, 0, pillW, pillH, r).fill({ color: left });
+    pill.roundRect(0, 0, pillW, pillH, r).fill({
+      color: right,
+      alpha: 0.35
+    });
 
     pill.y = this.panelHeight / 2 - pillH / 2;
 

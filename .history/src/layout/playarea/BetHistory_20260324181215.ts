@@ -48,7 +48,7 @@ private getColor(value: number) {
   else {
     return 0xffe066;   // light golden highlight
   }
-this.scale
+
 }
 private renderHistory(history: number[]) {
 

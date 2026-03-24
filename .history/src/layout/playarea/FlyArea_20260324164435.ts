@@ -169,7 +169,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
       const baseSpeed = (cloud as any).baseSpeed;
       const flow = (cloud as any).flow;
 
-      let speed = baseSpeed + mult * 3;
+      let speed = baseSpeed + mult * 1.5;
       speed = Math.min(speed, 8);
       const depth = cloud.scale.x;
 
@@ -224,7 +224,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
         // ⭐ cinematic easing (ease-in cubic)
         const ease = t * t * t;
 
-        this.bg.y += speed * 4.5* ease;
+        this.bg.y += speed * 2.9 * ease;
       }
     }
     if (this.cloudsActive) {

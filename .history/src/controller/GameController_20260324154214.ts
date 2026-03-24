@@ -18,27 +18,10 @@ private api: ApiClient
   this.initSocket()
 
   // ⭐ load history on game boot
- 
-    this.loadHistory()
+  this.loadHistory()
+    
   }
-private async loadHistory() {
-  try {
 
-    const res = await this.api.getCrashHistory(20, 0)
-
-const history = res.data.rows
-  .map((r: any) => r.crashRate)
-  
-
-// console.log("HISTORY ARRAY", history)
-
-gameEvents.emit("history:update", history)
-    gameEvents.emit("history:update", history)
-
-  } catch (e) {
-    console.log("HISTORY API FAILED", e)
-  }
-}
   private initSocket() {
 
     socket.onAny((event, payload) => {
@@ -71,7 +54,6 @@ gameEvents.emit("history:update", history)
         }
 
         gameEvents.emit("round:waiting", { seconds })
-        this.loadHistory()
         return
       }
 
@@ -82,7 +64,6 @@ gameEvents.emit("history:update", history)
   this.store.startFlying()
 
   gameEvents.emit("round:start")
-   
   return
 }
 
@@ -120,26 +101,20 @@ gameEvents.emit("history:update", history)
 
         gameEvents.emit("plane:update", { time, multiplier })
         return}
-       if (!running) {
+         if (!running) {
+            const crashRate = data.crashRate
 
-  const crashRate = data.crashRate
+        this.flightStarted = false
+        this.zeroSeen = false
 
-  this.flightStarted = false
-  this.zeroSeen = false
+        this.store.crashPoint = crashRate
 
-  this.store.crashPoint = crashRate
+        this.store.setPhase("CRASHED")
+        this.store.crash()
 
-  this.store.setPhase("CRASHED")
-  this.store.crash()
-
-  gameEvents.emit("plane:crash", { crashRate })
-  this.loadHistory()
-
-  // ⭐⭐⭐ VERY IMPORTANT
-  this.loadHistory()
-
-  return
-}
+        gameEvents.emit("plane:crash", { crashRate })
+        return
+        }
       }
 
       //  CRASH EVENT

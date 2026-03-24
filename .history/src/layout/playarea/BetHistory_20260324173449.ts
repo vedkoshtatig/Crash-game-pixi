@@ -30,25 +30,26 @@ private leftPadding = 24;
   }
 private getColor(value: number) {
 
-  if (value < 2) {
-    return 0x0b3d91;   // very dark blue
+  if (value <2) {
+     return 0x1e90ff;   // 🔵 strong blue
+   
   }
   else if (value < 5) {
-    return 0x1e5bd9;   // deep blue
+    return 0x5352ed;;   // 🟣 violet
   }
   else if (value < 7) {
-    return 0x157a6e;   // dark teal green
+    return 0x2ed573;   // 🟢 green
   }
   else if (value < 12) {
-    return 0x1abc9c;   // medium aqua
+    return 0x17c0eb;   // 🔵 sky blue
   }
   else if (value < 15) {
-    return 0xf39c12;   // warm amber
+    return 0xffa502;   // 🟠 orange
   }
   else {
-    return 0xffe066;   // light golden highlight
+    return 0xffdd59;   // 🟡 yellow
   }
-this.scale
+
 }
 private renderHistory(history: number[]) {
 
@@ -68,7 +69,7 @@ private renderHistory(history: number[]) {
     const txt = new Text({
       text: value.toFixed(2) + "x",
       style: {
-        fill: 0x222222,
+        fill: 0xffffff,
         fontSize: 18,
         fontWeight: "600"
       }

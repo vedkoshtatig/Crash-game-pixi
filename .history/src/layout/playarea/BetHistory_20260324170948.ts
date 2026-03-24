@@ -1,6 +1,6 @@
 import { Graphics, Container, Text } from "pixi.js";
 import { gameEvents } from "../../controller/GameController";
-import { gsap } from "gsap";
+
 export class BetHistory extends Container {
 
   private bg!: Graphics;
@@ -28,28 +28,7 @@ private leftPadding = 24;
       this.renderHistory(history);
     });
   }
-private getColor(value: number) {
 
-  if (value < 2) {
-    return 0x0b3d91;   // very dark blue
-  }
-  else if (value < 5) {
-    return 0x1e5bd9;   // deep blue
-  }
-  else if (value < 7) {
-    return 0x157a6e;   // dark teal green
-  }
-  else if (value < 12) {
-    return 0x1abc9c;   // medium aqua
-  }
-  else if (value < 15) {
-    return 0xf39c12;   // warm amber
-  }
-  else {
-    return 0xffe066;   // light golden highlight
-  }
-this.scale
-}
 private renderHistory(history: number[]) {
 
   const isNew =
@@ -68,7 +47,7 @@ private renderHistory(history: number[]) {
     const txt = new Text({
       text: value.toFixed(2) + "x",
       style: {
-        fill: 0x222222,
+        fill: 0xffffff,
         fontSize: 18,
         fontWeight: "600"
       }
@@ -81,14 +60,14 @@ private renderHistory(history: number[]) {
 
     const pill = new Graphics();
 
-const baseColor = this.getColor(value);
+    const left = value >= 2 ? 0x00c27a : 0xff4d4d;
+    const right = value >= 2 ? 0x00ff88 : 0xff0000;
 
-    pill.roundRect(0, 0, pillW, pillH, r).fill({ color: baseColor });
-
-pill.roundRect(0, 0, pillW, pillH, r).fill({
-  color: 0xffffff,
-  alpha: 0.08   // subtle glossy overlay
-});
+    pill.roundRect(0, 0, pillW, pillH, r).fill({ color: left });
+    pill.roundRect(0, 0, pillW, pillH, r).fill({
+      color: right,
+      alpha: 0.35
+    });
 
     pill.y = this.panelHeight / 2 - pillH / 2;
 
@@ -96,62 +75,36 @@ pill.roundRect(0, 0, pillW, pillH, r).fill({
 
     // ⭐⭐⭐ POSITION ANIMATION MAGIC
 
-  if (isNew) {
+    if (isNew) {
+      if (i === 0) {
+        // NEW ITEM → start from left outside
+        pill.x = -pillW;
+        txt.x = pill.x + pillW / 2 - txt.width / 2;
 
-  if (i === 0) {
-    // ⭐ NEW ENTRY HERO ANIMATION
+        gsap.to(pill, { x, duration: 0.35, ease: "power3.out" });
+        gsap.to(txt, {
+          x: x + pillW / 2 - txt.width / 2,
+          duration: 0.35,
+          ease: "power3.out"
+        });
+      } else {
+        // OLD ITEMS → shift right
+        const shiftX = x + 60;   // small push feel
 
-    pill.x = -pillW - 40;
-    pill.alpha = 0;
-    pill.scale.set(0.6);
+        pill.x = shiftX;
+        txt.x = shiftX + pillW / 2 - txt.width / 2;
 
-    txt.x = pill.x + pillW / 2 - txt.width / 2;
-    txt.alpha = 0;
-    txt.scale.set(0.6);
-
-    gsap.to(pill, {
-      x,
-      alpha: 1,
-      scale: 1,
-      duration: 0.55,
-      ease: "back.out(1.8)"
-    });
-
-    gsap.to(txt, {
-      x: x + pillW / 2 - txt.width / 2,
-      alpha: 1,
-      scale: 1,
-      duration: 0.55,
-      ease: "back.out(1.8)"
-    });
-
-  } else {
-    // ⭐ EXISTING ITEMS SMOOTH PUSH
-
-    const targetX = x;
-
-    pill.x = x - 30;   // start slightly left
-    txt.x = pill.x + pillW / 2 - txt.width / 2;
-
-    gsap.to(pill, {
-      x: targetX,
-      duration: 0.45,
-      ease: "power2.out",
-      delay: i * 0.03   // ⭐ stagger magic
-    });
-
-    gsap.to(txt, {
-      x: targetX + pillW / 2 - txt.width / 2,
-      duration: 0.45,
-      ease: "power2.out",
-      delay: i * 0.03
-    });
-  }
-
-} else {
-  pill.x = x;
-  txt.x = x + pillW / 2 - txt.width / 2;
-}
+        gsap.to(pill, { x, duration: 0.35, ease: "power3.out" });
+        gsap.to(txt, {
+          x: x + pillW / 2 - txt.width / 2,
+          duration: 0.35,
+          ease: "power3.out"
+        });
+      }
+    } else {
+      pill.x = x;
+      txt.x = x + pillW / 2 - txt.width / 2;
+    }
 
     this.addChild(pill);
     this.addChild(txt);

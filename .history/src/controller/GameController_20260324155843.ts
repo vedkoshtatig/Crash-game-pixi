@@ -30,7 +30,7 @@ const history = res.data.rows
   .map((r: any) => r.crashRate)
   
 
-// console.log("HISTORY ARRAY", history)
+console.log("HISTORY ARRAY", history)
 
 gameEvents.emit("history:update", history)
     gameEvents.emit("history:update", history)

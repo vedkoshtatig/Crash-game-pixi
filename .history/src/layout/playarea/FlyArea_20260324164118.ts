@@ -86,8 +86,7 @@ export class FlyArea extends Container {
       bounds.x + bounds.width / 2,
       bounds.y + bounds.height / 2
     );
-    const planeBaseScale = Math.min(this.flyWidth, this.flyHeight) / 1050;
-this.plane.scale.set(planeBaseScale * 0.085);
+    this.plane.scale.set(0.085);
     this.plane.state.setAnimation(0, "Rest", true);
 
     this.multiplierText = new Text({
@@ -169,7 +168,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
       const baseSpeed = (cloud as any).baseSpeed;
       const flow = (cloud as any).flow;
 
-      let speed = baseSpeed + mult * 3;
+      let speed = baseSpeed + mult * 1.5;
       speed = Math.min(speed, 8);
       const depth = cloud.scale.x;
 
@@ -207,7 +206,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
       // ⭐ remember: higher y = LOWER on screen
 
       // ⭐ always move world backward
-      this.bg.x -= speed * 10;
+      this.bg.x -= speed * 2.3;
 
       // ⭐ ONLY after take-off → move world downward
       const runwayTime = 0.42;
@@ -224,7 +223,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
         // ⭐ cinematic easing (ease-in cubic)
         const ease = t * t * t;
 
-        this.bg.y += speed * 4.5* ease;
+        this.bg.y += speed * 2.9 * ease;
       }
     }
     if (this.cloudsActive) {
@@ -326,7 +325,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
     if (!this.isFlying && !this.isCrashed) {
       this.plane.position.set(this.startX, this.startY);
     }
-    const planeBaseScale = Math.min(this.flyWidth, this.flyHeight) / 1050;
+    const planeBaseScale = Math.min(this.flyWidth, this.flyHeight) / 900;
 this.plane.scale.set(planeBaseScale * 0.085);
     if (!this.bgDrift) {
       // this.bg.position.set(this.flyWidth / 2, this.flyHeight / 2 -40);////////////change

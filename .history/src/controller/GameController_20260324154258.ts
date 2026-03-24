@@ -18,21 +18,18 @@ private api: ApiClient
   this.initSocket()
 
   // ⭐ load history on game boot
- 
-    this.loadHistory()
+  this.loadHistory()
+    
   }
 private async loadHistory() {
   try {
 
     const res = await this.api.getCrashHistory(20, 0)
 
-const history = res.data.rows
-  .map((r: any) => r.crashRate)
-  
+    const history = res.rows
+      .map(r => r.crashRate)
+      .reverse()   // latest on right like Stake
 
-// console.log("HISTORY ARRAY", history)
-
-gameEvents.emit("history:update", history)
     gameEvents.emit("history:update", history)
 
   } catch (e) {
@@ -71,7 +68,6 @@ gameEvents.emit("history:update", history)
         }
 
         gameEvents.emit("round:waiting", { seconds })
-        this.loadHistory()
         return
       }
 
@@ -82,7 +78,6 @@ gameEvents.emit("history:update", history)
   this.store.startFlying()
 
   gameEvents.emit("round:start")
-   
   return
 }
 
@@ -133,7 +128,6 @@ gameEvents.emit("history:update", history)
   this.store.crash()
 
   gameEvents.emit("plane:crash", { crashRate })
-  this.loadHistory()
 
   // ⭐⭐⭐ VERY IMPORTANT
   this.loadHistory()

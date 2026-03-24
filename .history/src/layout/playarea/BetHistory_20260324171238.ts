@@ -28,28 +28,7 @@ private leftPadding = 24;
       this.renderHistory(history);
     });
   }
-private getColor(value: number) {
 
-  if (value < 2) {
-    return 0x0b3d91;   // very dark blue
-  }
-  else if (value < 5) {
-    return 0x1e5bd9;   // deep blue
-  }
-  else if (value < 7) {
-    return 0x157a6e;   // dark teal green
-  }
-  else if (value < 12) {
-    return 0x1abc9c;   // medium aqua
-  }
-  else if (value < 15) {
-    return 0xf39c12;   // warm amber
-  }
-  else {
-    return 0xffe066;   // light golden highlight
-  }
-this.scale
-}
 private renderHistory(history: number[]) {
 
   const isNew =
@@ -68,7 +47,7 @@ private renderHistory(history: number[]) {
     const txt = new Text({
       text: value.toFixed(2) + "x",
       style: {
-        fill: 0x222222,
+        fill: 0xffffff,
         fontSize: 18,
         fontWeight: "600"
       }
@@ -81,14 +60,14 @@ private renderHistory(history: number[]) {
 
     const pill = new Graphics();
 
-const baseColor = this.getColor(value);
+    const left = value >= 2 ? 0x00c27a : 0xff4d4d;
+    const right = value >= 2 ? 0x00ff88 : 0xff0000;
 
-    pill.roundRect(0, 0, pillW, pillH, r).fill({ color: baseColor });
-
-pill.roundRect(0, 0, pillW, pillH, r).fill({
-  color: 0xffffff,
-  alpha: 0.08   // subtle glossy overlay
-});
+    pill.roundRect(0, 0, pillW, pillH, r).fill({ color: left });
+    pill.roundRect(0, 0, pillW, pillH, r).fill({
+      color: right,
+      alpha: 0.35
+    });
 
     pill.y = this.panelHeight / 2 - pillH / 2;
 

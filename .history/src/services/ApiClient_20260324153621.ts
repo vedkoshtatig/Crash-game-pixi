@@ -59,15 +59,15 @@ export class ApiClient {
       }
     );
   }
-getCrashHistory(limit = 20, offset = 0) {
+  getCrashHistory(limit = 20, offset = 0) {
   return this.request<{
-    count: number
-    rows: { roundId: string; crashRate: number }[]
+    count: number;
+    rows: { roundId: string; crashRate: number }[];
   }>(
     `/crash-game/get-crash-game-history?limit=${limit}&offset=${offset}`,
     {
       method: "GET",
     }
-  )
+  );
 }
 }

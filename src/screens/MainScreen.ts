@@ -103,7 +103,7 @@ private layout() {
     );
 
     // FLY AREA (MIDDLE)
-    const flyHeight = height * 0.52;
+    const flyHeight = height * 0.7;
 
     this.flyArea.position.set(
       GAP,

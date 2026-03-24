@@ -107,7 +107,7 @@ private panelHeight = 0;
   if (s.hasBet) {
     btn.className = "bc-bet-btn bc-state-cashout";
     title.textContent = "Cashout";
-    amt.textContent = s.multiplier.toFixed(2) + "x";
+    amt.textContent = s.liveWinAmount.toFixed(2) + " USD";
 
     btn.onclick = () => s.cashOut();
   }

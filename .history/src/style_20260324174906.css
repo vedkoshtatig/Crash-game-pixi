@@ -110,7 +110,7 @@ body {
   align-items:center;
   justify-content:center;
 
-  font-size:0.9vw;     /* 🔥 responsive text */
+  font-size:52;     /* 🔥 responsive text */
   min-font-size:12px;
 
   font-weight:600;
@@ -372,7 +372,7 @@ font-size:22px;   /* was 28 */
   align-items:center;
   justify-content:center;
 
-  font-size:.85vw;
+  font-size:200vw;
   font-weight:600;
   cursor:pointer;
   transition:.15s;
