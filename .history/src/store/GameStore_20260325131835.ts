@@ -34,9 +34,10 @@ public autoBetEnabled = false
   private listeners: (() => void)[] = [];
 public autoCashoutEnabled = false
 public autoCashoutMultiplier = 20 // ⭐ default target (future use)
+private cashoutMultiplier : number =0
   private constructor() {
     const token = getAuthToken();
-
+    
     console.log("TOKEN =", token);
 
     this.api = new ApiClient(token);
@@ -221,6 +222,8 @@ startFlying() {
   ) {
     console.log("AUTO CASHOUT TRIGGERED");
 
+    // IMPORTANT → call async but don't block render loop
+     this.cashoutMultiplier=this.multiplier;
     this.hasCashedOut=true;
    
   }

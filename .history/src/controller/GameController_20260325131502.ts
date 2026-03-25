@@ -26,7 +26,7 @@ private async loadHistory() {
 
     const res = await this.api.getCrashHistory(20, 0)
 
-const history= res.data.rows
+const history:any= res.data.rows
   .map((r: any) => r.crashRate)
   
 
