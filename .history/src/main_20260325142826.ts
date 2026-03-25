@@ -9,6 +9,7 @@ export let app: Application;
 
 (async () => {
 
+  // ⭐ LOAD ASSETS FIRST
   await AssetLoader.instance.loadAll((p) => {
     console.log("Loading:", Math.round(p * 100) + "%");
   });

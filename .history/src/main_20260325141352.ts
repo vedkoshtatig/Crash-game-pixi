@@ -9,6 +9,7 @@ export let app: Application;
 
 (async () => {
 
+  // ⭐ LOAD ASSETS FIRST
   await AssetLoader.instance.loadAll((p) => {
     console.log("Loading:", Math.round(p * 100) + "%");
   });
@@ -22,7 +23,8 @@ export let app: Application;
   });
 
   document.getElementById("pixi-container")!.appendChild(app.canvas);
-
+const loaderScreen = new LoadingScreen();
+  app.stage.addChild(loaderScreen);
   const mainScreen = new MainScreen();
   app.stage.addChild(mainScreen);
 

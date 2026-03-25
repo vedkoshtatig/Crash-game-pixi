@@ -2,16 +2,13 @@ import { Application } from "pixi.js";
 import { MainScreen } from "./screens/MainScreen";
 import { GameController } from "./controller/GameController";
 import { AssetLoader } from "./core/AssetLoader";
+import { LoadingScreen } from "./screens/LoadingScreen";
 import '@esotericsoftware/spine-pixi-v8';
 import "./style.css";
 
 export let app: Application;
 
 (async () => {
-
-  await AssetLoader.instance.loadAll((p) => {
-    console.log("Loading:", Math.round(p * 100) + "%");
-  });
 
   app = new Application();
 
@@ -23,9 +20,22 @@ export let app: Application;
 
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  const mainScreen = new MainScreen();
-  app.stage.addChild(mainScreen);
+  // ⭐ ADD LOADING SCREEN FIRST
+  const loader = new LoadingScreen()
+app.stage.addChild(loader)
 
-  new GameController();
+await AssetLoader.instance.loadAll(p=>{
+  loader.setProgress(p * 0.5)
+})
 
+const controller = new GameController()
+
+await controller.start(p=>{
+  loader.setProgress(0.5 + p * 0.5)
+})
+
+app.stage.removeChild(loader)
+
+const main = new MainScreen()
+app.stage.addChild(main)
 })();

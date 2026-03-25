@@ -2,6 +2,7 @@ import { Application } from "pixi.js";
 import { MainScreen } from "./screens/MainScreen";
 import { GameController } from "./controller/GameController";
 import { AssetLoader } from "./core/AssetLoader";
+import { LoadingScreen } from "./screens/LoadingScreen";
 import '@esotericsoftware/spine-pixi-v8';
 import "./style.css";
 
@@ -9,6 +10,7 @@ export let app: Application;
 
 (async () => {
 
+  // ⭐ LOAD ASSETS FIRST
   await AssetLoader.instance.loadAll((p) => {
     console.log("Loading:", Math.round(p * 100) + "%");
   });
@@ -22,7 +24,12 @@ export let app: Application;
   });
 
   document.getElementById("pixi-container")!.appendChild(app.canvas);
+const loaderScreen = new LoadingScreen();
+app.stage.addChild(loaderScreen);
 
+await AssetLoader.load((p:number)=>{
+   loaderScreen.updateProgress(p);
+});
   const mainScreen = new MainScreen();
   app.stage.addChild(mainScreen);
 

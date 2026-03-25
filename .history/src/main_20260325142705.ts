@@ -9,10 +9,6 @@ export let app: Application;
 
 (async () => {
 
-  await AssetLoader.instance.loadAll((p) => {
-    console.log("Loading:", Math.round(p * 100) + "%");
-  });
-
   app = new Application();
 
   await app.init({
@@ -23,9 +19,15 @@ export let app: Application;
 
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  const mainScreen = new MainScreen();
-  app.stage.addChild(mainScreen);
+  // ⭐ LOAD ALL ASSETS FROM SINGLE SOURCE
+  await AssetLoader.instance.loadAll((p) => {
+    console.log("Loading:", Math.round(p * 100), "%");
+  });
 
-  new GameController();
+  // ⭐ start game AFTER assets loaded
+  GameController.instance.init();
+
+  const main = new MainScreen();
+  app.stage.addChild(main);
 
 })();
