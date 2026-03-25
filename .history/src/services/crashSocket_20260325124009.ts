@@ -1,6 +1,6 @@
 import { io, Socket } from "socket.io-client"
 
-const GRAIL_BET_URL: string = "http://14.96.241.250:8007"
+const GRAIL_BET_URL: string = "http://14.96.241.250/:8007"
 
 
 export const socket: Socket = io(`${GRAIL_BET_URL}/crash-game`, {

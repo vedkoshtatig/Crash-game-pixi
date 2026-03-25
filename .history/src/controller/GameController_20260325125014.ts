@@ -55,7 +55,6 @@ gameEvents.emit("history:update", history)
         this.zeroSeen = false
 
         gameEvents.emit("round:created", { roundId })
-         this.loadHistory()
         return
       }
 
@@ -145,7 +144,7 @@ gameEvents.emit("history:update", history)
 
       //  CRASH EVENT
       if (event.includes("roundStopped")) {
- this.loadHistory()
+
       
       }
 

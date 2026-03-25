@@ -122,7 +122,7 @@ private panelHeight = 0;
       btn.onclick = () => s.cancelScheduledBet();
     } else {
       title.textContent = s.autoBetEnabled ? "Auto Bet" : "Bet";
-      amt.textContent = s.betAmount.toFixed(2) ;
+      amt.textContent = s.betAmount.toFixed(2) + " USD";
       btn.onclick = () => s.scheduleBet();
     }
   }

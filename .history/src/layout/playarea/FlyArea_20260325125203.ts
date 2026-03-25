@@ -224,7 +224,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
         // ⭐ cinematic easing (ease-in cubic)
         const ease = t * t * t;
 
-        this.bg.y += speed * 12* ease;
+        this.bg.y += speed * 6* ease;
       }
     }
     if (this.cloudsActive) {

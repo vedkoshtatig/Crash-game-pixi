@@ -60,7 +60,7 @@ private panelHeight = 0;
     else {
 
       title.textContent = "Auto Bet";
-      amt.textContent = s.betAmount.toFixed(2) ;
+      amt.textContent = s.betAmount.toFixed(2) + " USD";
 
       btn.onclick = () => s.setAutoBet(true);
 
@@ -71,11 +71,11 @@ private panelHeight = 0;
 
           if (s.hasBet) {
             title.textContent = "Cancel";
-            amt.textContent = s.currentRoundBet.toFixed(2) ;
+            amt.textContent = s.currentRoundBet.toFixed(2) + " USD";
             btn.onclick = () => s.cancelBet();
           } else {
             title.textContent = "Bet";
-            amt.textContent = s.betAmount.toFixed(2) ;
+            amt.textContent = s.betAmount.toFixed(2) + " USD";
             btn.onclick = () => s.placeBet();
           }
         }
@@ -89,10 +89,10 @@ private panelHeight = 0;
     btn.className = "bc-bet-btn bc-state-success";
     title.textContent = "Cashed";
     if(s.winAmount>0){
-      amt.textContent = s.winAmount.toFixed(2) ;
+      amt.textContent = s.winAmount.toFixed(2) + " USD";
     }else{
       const mult = (s.betAmount*s.autoCashoutMultiplier)
-      amt.textContent= mult.toFixed(2) 
+      amt.textContent= mult.toFixed(2) + " USD"
     }
     
 
@@ -122,7 +122,7 @@ private panelHeight = 0;
       btn.onclick = () => s.cancelScheduledBet();
     } else {
       title.textContent = s.autoBetEnabled ? "Auto Bet" : "Bet";
-      amt.textContent = s.betAmount.toFixed(2) ;
+      amt.textContent = s.betAmount.toFixed(2) + " USD";
       btn.onclick = () => s.scheduleBet();
     }
   }

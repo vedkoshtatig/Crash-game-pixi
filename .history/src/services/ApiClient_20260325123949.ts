@@ -1,5 +1,5 @@
 export class ApiClient {
-  private BASE_URL = "http://14.96.241.250:8004/api/v1";
+  private BASE_URL = "http://http://14.96.241.250/:8004/api/v1";
 
   private token: string | null;
 

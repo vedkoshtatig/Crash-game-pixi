@@ -145,7 +145,7 @@ gameEvents.emit("history:update", history)
 
       //  CRASH EVENT
       if (event.includes("roundStopped")) {
- this.loadHistory()
+
       
       }
 
