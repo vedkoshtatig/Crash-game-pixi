@@ -1,12 +1,10 @@
 export class ApiClient {
-
-  private BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  private BASE_URL = "http://14.96.241.250:8004/api/v1";
 
   private token: string | null;
 
-  constructor(token: string | null) {
-    this.token = token;
-  }
+  VITE_API_BASE_URL=http://14.96.241.250:8004/api/v1
+VITE_SOCKET_URL=http://14.96.241.250:8007
 
   private async request<T>(path: string, options: RequestInit): Promise<T> {
     const res = await fetch(`${this.BASE_URL}${path}`, {

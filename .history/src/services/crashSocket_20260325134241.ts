@@ -1,8 +1,8 @@
 import { io, Socket } from "socket.io-client"
 
-const BASE_URL: string = import.meta.env.VITE_SOCKET_URL;
+const Ba_URL: string = import.meta.env.VITE_SOCKET_URL;
 
-export const socket: Socket = io(`${BASE_URL}/crash-game`, {
+export const socket: Socket = io(`${GRAIL_BET_URL}/crash-game`, {
   path: "/api/socket",
   transports: ["websocket"],
   reconnection: true,
@@ -11,9 +11,9 @@ export const socket: Socket = io(`${BASE_URL}/crash-game`, {
 })
 
 socket.on("connect", () => {
-  // console.log("Crash socket connected:", socket.id)
+  console.log("Crash socket connected:", socket.id)
 })
 
 socket.on("disconnect", (reason) => {
-  // console.log(" Crash socket disconnected:", reason)
+  console.log(" Crash socket disconnected:", reason)
 })

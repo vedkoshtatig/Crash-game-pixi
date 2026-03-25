@@ -36,7 +36,7 @@ gameEvents.emit("history:update", history)
     gameEvents.emit("history:update", history)
 
   } catch (e) {
-    // console.log("HISTORY API FAILED", e)
+    console.log("HISTORY API FAILED", e)
   }
 }
   private initSocket() {

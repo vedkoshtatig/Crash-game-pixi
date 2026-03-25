@@ -351,7 +351,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
       this.isCrashed = false;
       this.isWaiting = true;
 
-      // console.log("Waiting for next round");
+      console.log("Waiting for next round");
 
       this.isFlying = false;
       this.serverTime = 0;
@@ -365,7 +365,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
     gameEvents.on("round:start", () => {
       this.takeoffPlayed = false;
       this.bgDrift = true;
-      // console.log("Plane taking off");
+      console.log("Plane taking off");
       this.skyAnimating = true;
       this.isWaiting = false;
       this.serverTime = 0;

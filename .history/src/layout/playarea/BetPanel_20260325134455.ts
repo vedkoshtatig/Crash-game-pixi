@@ -96,7 +96,9 @@ private panelHeight = 0;
     }
     
 
-    btn.onclick = null
+    btn.onclick = () => {
+      // console.log("hello");   // now this will work
+    };
 
     return;   // ⭐ VERY IMPORTANT
   }
