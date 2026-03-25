@@ -18,3 +18,4 @@ socket.on("connect", () => {
 socket.on("disconnect", (reason) => {
   console.log(" Crash socket disconnected:", reason)
 })
+/
