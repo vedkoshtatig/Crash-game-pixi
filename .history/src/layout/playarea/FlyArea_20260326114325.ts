@@ -25,7 +25,7 @@ export class FlyArea extends Container {
   private flyWidth: number = 0;
   private flyHeight: number = 0;
   private takeoffPlayed = false;
-
+private visualTime = 0;
   private startX: number = 0;
   private startY: number = 0;
 
@@ -201,7 +201,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
   update() {
     if (this.bgDrift) {
       const mult = CrashGameStore.instance.multiplier;
-
+this.visualTime += dt;
       // cinematic acceleration curve
       const speed = 2 + Math.log(mult + 1) * 0.8;
       // ⭐ remember: higher y = LOWER on screen
@@ -269,7 +269,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
       this.takeoffPlayed = true;
 
       const takeoff =this.plane.state.setAnimation(0, "Take-off", false);
-      takeoff.timeScale = 1
+      takeoff.timeScale = 0.6
       const fly =this.plane.state.addAnimation(0, "Flying", true, 0);
       fly.timeScale = 0.35
     }

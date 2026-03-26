@@ -268,8 +268,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
     if (!this.takeoffPlayed && this.serverTime >= runwayTime) {
       this.takeoffPlayed = true;
 
-      const takeoff =this.plane.state.setAnimation(0, "Take-off", false);
-      takeoff.timeScale = 1
+      this.plane.state.setAnimation(0, "Take-off", false);
       const fly =this.plane.state.addAnimation(0, "Flying", true, 0);
       fly.timeScale = 0.35
     }

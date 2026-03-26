@@ -25,7 +25,7 @@ export class FlyArea extends Container {
   private flyWidth: number = 0;
   private flyHeight: number = 0;
   private takeoffPlayed = false;
-
+private visualTime = 0;
   private startX: number = 0;
   private startY: number = 0;
 
@@ -262,14 +262,14 @@ this.plane.scale.set(planeBaseScale * 0.085);
 
     const now = performance.now();
     const dt = (now - this.lastUpdate) / 1000;
-
+this.visualTime += dt;
     this.serverTime += dt;
     const runwayTime = 0.42;
-    if (!this.takeoffPlayed && this.serverTime >= runwayTime) {
+    if (!this.takeoffPlayed && this.visualTime >= runwayTime) {
       this.takeoffPlayed = true;
 
       const takeoff =this.plane.state.setAnimation(0, "Take-off", false);
-      takeoff.timeScale = 1
+      takeoff.timeScale = 0.6
       const fly =this.plane.state.addAnimation(0, "Flying", true, 0);
       fly.timeScale = 0.35
     }

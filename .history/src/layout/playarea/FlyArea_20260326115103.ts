@@ -269,7 +269,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
       this.takeoffPlayed = true;
 
       const takeoff =this.plane.state.setAnimation(0, "Take-off", false);
-      takeoff.timeScale = 1
+      takeoff.timeScale = 0.6
       const fly =this.plane.state.addAnimation(0, "Flying", true, 0);
       fly.timeScale = 0.35
     }

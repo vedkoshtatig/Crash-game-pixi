@@ -25,7 +25,7 @@ export class FlyArea extends Container {
   private flyWidth: number = 0;
   private flyHeight: number = 0;
   private takeoffPlayed = false;
-
+private visualTime = 0;
   private startX: number = 0;
   private startY: number = 0;
 
@@ -265,14 +265,18 @@ this.plane.scale.set(planeBaseScale * 0.085);
 
     this.serverTime += dt;
     const runwayTime = 0.42;
-    if (!this.takeoffPlayed && this.serverTime >= runwayTime) {
-      this.takeoffPlayed = true;
+ const liftThreshold = this.startY - this.flyHeight * 0.02; 
+// ⭐ small lift detection (tweak value)
 
-      const takeoff =this.plane.state.setAnimation(0, "Take-off", false);
-      takeoff.timeScale = 1
-      const fly =this.plane.state.addAnimation(0, "Flying", true, 0);
-      fly.timeScale = 0.35
-    }
+if (!this.takeoffPlayed && this.plane.y < this.startY) {
+  this.takeoffPlayed = true;
+
+  const takeoff = this.plane.state.setAnimation(0, "Take-off", false);
+  takeoff.timeScale = 0.6;
+
+  const fly = this.plane.state.addAnimation(0, "Flying", true, 0);
+  fly.timeScale = 0.35;
+}
     this.flyPlane(this.serverTime);
     if (this.isCrashed) {
   this.blast.update(dt);
