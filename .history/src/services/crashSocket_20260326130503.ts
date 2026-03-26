@@ -10,9 +10,9 @@ export const socket: Socket = io(`${BASE_URL}/crash-game`, {
   reconnectionDelay: 1000,
 })
 
-// socket.on("connect", () => {
-//   // console.log("Crash socket connected:", socket.id)
-// })
+socket.on("connect", () => {
+  // console.log("Crash socket connected:", socket.id)
+})
 
 // socket.on("disconnect", (reason) => {
 //   // console.log(" Crash socket disconnected:", reason)
