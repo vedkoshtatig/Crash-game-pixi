@@ -52,7 +52,7 @@ body {
 
 .bet-card-ui {
   width: 90%;
-  height: 35%;
+  height: 40%;
   max-width: 500px;
   pointer-events: auto;
   border-radius: 26px;
@@ -485,7 +485,7 @@ font-size:22px;   /* was 28 */
   color:#6f747c;
   font-weight:600;
 }
-@media (max-width: 920px){
+@media (max-width: 1250px){
   .bet-card-ui{
     height: 110%;
     max-height: none;

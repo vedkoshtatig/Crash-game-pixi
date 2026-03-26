@@ -1,6 +1,6 @@
 import { io, Socket } from "socket.io-client"
 
-const BASE_URL: string = "https://cron-dev.grailbet.com";
+const BASE_URL: string = https://cron-dev.grailbet.com";
 
 export const socket: Socket = io(`${BASE_URL}/crash-game`, {
   path: "/api/socket",

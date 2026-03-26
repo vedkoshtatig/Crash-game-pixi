@@ -56,14 +56,14 @@ private layout() {
   const { width, height } = app.screen;
 
   const GAP = 4;
-  const isMobile = width <= 1250;
+  const isMobile = width <= 920;
 
   const betHistoryHeight = height / 32;
 
   if (!isMobile) {
 
     // ⭐⭐⭐ DESKTOP LAYOUT (your current)
-    const leftWidth = width / 5;
+    const leftWidth = width /;
     const rightWidth = width - leftWidth - GAP * 3;
 
     this.betPanel.position.set(GAP, GAP);

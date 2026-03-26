@@ -365,7 +365,7 @@ if (isMobile) {
   this.wrapper.style.alignItems = "center";          // ⭐ better full width feel
 }
 else {
-  this.wrapper.style.justifyContent = "center"; // ⭐ desktop behaviour
+  this.wrapper.style.justifyContent = ""; // ⭐ desktop behaviour
   this.wrapper.style.alignItems = "stretch";
 }
 this.wrapper.style.gap = "12px";

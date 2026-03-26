@@ -264,7 +264,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
     const dt = (now - this.lastUpdate) / 1000;
 
     this.serverTime += dt;
-    const runwayTime = 0.42;
+    const runwayTime = 0.4;
     if (!this.takeoffPlayed && this.serverTime >= runwayTime) {
       this.takeoffPlayed = true;
 

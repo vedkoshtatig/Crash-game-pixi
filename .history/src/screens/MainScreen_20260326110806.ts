@@ -56,7 +56,7 @@ private layout() {
   const { width, height } = app.screen;
 
   const GAP = 4;
-  const isMobile = width <= 1250;
+  const isMobile = width <= 920;
 
   const betHistoryHeight = height / 32;
 

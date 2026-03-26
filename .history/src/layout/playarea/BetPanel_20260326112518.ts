@@ -358,14 +358,14 @@ const height = this.panelHeight;
   this.wrapper.style.flexDirection = "column";
 this.wrapper.style.alignItems = "stretch";
 
-const isMobile = width <= 1250;
+const isMobile = width <= 920;
 
 if (isMobile) {
-  this.wrapper.style.justifyContent = "flex-start";   // ⭐ fix
+  this.wrapper.style.justifyContent = "flex-star";   // ⭐ fix
   this.wrapper.style.alignItems = "center";          // ⭐ better full width feel
 }
 else {
-  this.wrapper.style.justifyContent = "center"; // ⭐ desktop behaviour
+  this.wrapper.style.justifyContent = "flex-start"; // ⭐ desktop behaviour
   this.wrapper.style.alignItems = "stretch";
 }
 this.wrapper.style.gap = "12px";
