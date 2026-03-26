@@ -432,7 +432,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
     // ⭐ responsive horizontal bounds (same visual feel)
     const maxX = this.flyWidth - this.flyWidth * 0.25;
 
-  const horizontalTravel = this.flyWidth * 0.8;  
+  const horizontalTravel = this.flyWidth * 0.55;  
 // ⭐ how much runway distance plane should cover visually
 
 const speed = horizontalTravel / 2.2;  

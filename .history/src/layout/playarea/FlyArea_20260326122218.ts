@@ -432,13 +432,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
     // ⭐ responsive horizontal bounds (same visual feel)
     const maxX = this.flyWidth - this.flyWidth * 0.25;
 
-  const horizontalTravel = this.flyWidth * 0.8;  
-// ⭐ how much runway distance plane should cover visually
-
-const speed = horizontalTravel / 2.2;  
-// ⭐ 2.2 sec to reach cruise feel (tweakable cinematic timing)
-
-const x = Math.min(this.startX + time * speed, maxX);
+    const x = Math.min(this.startX + time * 530, maxX);
     const reachedCruise = x >= maxX;
 
     // ⭐ cloud trigger same timing feel
