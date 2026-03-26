@@ -485,7 +485,7 @@ font-size:22px;   /* was 28 */
   color:#6f747c;
   font-weight:600;
 }
-@media (max-width: 1250px){
+@media (max-width: 91250px){
   .bet-card-ui{
     height: 110%;
     max-height: none;
