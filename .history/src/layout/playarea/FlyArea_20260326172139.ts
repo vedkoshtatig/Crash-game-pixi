@@ -37,7 +37,7 @@ export class FlyArea extends Container {
   private viewWidth: number = 0;
   private viewHeight: number = 0;
   private placeBetText!: Text;
-  private cloudTexture = Texture.from("cloud");
+  private cloudTexture = Texture.from("/Clouds_01.png");
 
   constructor() {
     super();
