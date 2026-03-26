@@ -88,7 +88,7 @@ private layout() {
 
     this.flyArea.resize(
       rightWidth,
-      flyHeight
+      flyHeight-500
     );
 
   } else {
@@ -103,7 +103,7 @@ private layout() {
     );
 
     // FLY AREA (MIDDLE)
-    const flyHeight = height * 0.65;
+    const flyHeight = height * 0.7;
 
     this.flyArea.position.set(
       GAP,

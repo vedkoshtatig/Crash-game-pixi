@@ -490,7 +490,9 @@ font-size:22px;   /* was 28 */
     height: 100%;
     max-height: none;
     overflow: hidden;
-
+    /* visibility: hidden; */
+    margin: 0;
+    /* padding: 0; */
   }
   .bet-panel-wrapper {
 overflow: hidden;

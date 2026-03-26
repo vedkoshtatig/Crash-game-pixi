@@ -487,10 +487,9 @@ font-size:22px;   /* was 28 */
 }
 @media (max-width: 1250px){
   .bet-card-ui{
-    height: 100%;
-    max-height: none;
+    height: 110%;
+    max-height: 100%;
     overflow: hidden;
-
   }
   .bet-panel-wrapper {
 overflow: hidden;
