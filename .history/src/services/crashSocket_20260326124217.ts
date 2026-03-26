@@ -11,7 +11,7 @@ export const socket: Socket = io(`${BASE_URL}/crash-game`, {
 })
 
 socket.on("connect", () => {
-  // console.log("Crash socket connected:", socket.id)
+  console.log("Crash socket connected:", socket.id)
 })
 
 socket.on("disconnect", (reason) => {
