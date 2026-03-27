@@ -53,7 +53,8 @@ export class MainScreen extends Container {
 
 private layout() {
 
-  const { width, height } = app.screen;
+  const width= app.screen.width;
+  const height= app.screen.height;
 
   const GAP = 4;
   const isMobile = width <= 1250;

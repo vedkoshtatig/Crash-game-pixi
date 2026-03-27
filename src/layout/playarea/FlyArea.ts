@@ -599,7 +599,7 @@ const x = Math.min(this.startX + time * speed, maxX);
       bounds.x + bounds.width / 2,
       bounds.y + bounds.height / 2
     );
-   const baseScale = Math.min(this.flyWidth, this.flyHeight) / 1050;
+   const baseScale = Math.min(this.flyWidth, this.flyHeight) / 800;
 
 // usually blast should be slightly bigger than plane
 this.blast.scale.set(baseScale * 0.14);
