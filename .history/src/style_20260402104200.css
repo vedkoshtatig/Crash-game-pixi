@@ -1,0 +1,593 @@
+body {
+  margin: 0;
+  background: #1b1b1b;
+}
+@font-face {
+  font-family: "StarShield";
+  src: url("/fonts/StarShieldV2-9M52K.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Shock";
+  src: url("/fonts/ShockSurgent.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Health";
+  src: url("/fonts/Healthergreen.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/Montserrat-Black.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Montserrat-b";
+  src: url("/fonts/Montserrat-Bold.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Shock";
+  src: url("/fonts/Octin.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+#app {
+  width: 100%;
+  height: 100vh;
+}
+
+/* ⭐ THIS becomes layout root */
+#pixi-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ⭐ canvas fills container */
+#pixi-container canvas {
+  position: absolute;
+  inset: 0;
+}
+
+/* ⭐ UI glass layer */
+#ui-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ⭐ actual card */
+.bet-panel-wrapper {
+   top:0;
+  left:0;
+  position: absolute;
+  display: flex;
+  justify-content: center; /* ⭐ center when single */
+  align-items: center;
+  /* gap: 20px; */
+  /* padding: 60px; */
+  box-sizing: border-box;
+  z-index: 40;
+  pointer-events: none; /* let pixi interactions pass */
+  
+}
+
+.bet-card-ui {
+  width:100%;
+  height: 100%;
+  min-height:100%;
+  max-width: 500px;
+  pointer-events: auto;
+  border-radius: 20px;
+
+  /* ⭐ inner safe padding */
+  padding:14px 20px;   /* was 20px 26px */
+  gap:10px;            /* was 14px */
+  box-sizing: border-box;
+
+  backdrop-filter: blur(20px);
+  background: rgba(86, 94, 97, 0.38);
+  border: 2px solid rgba(97, 198, 237, 0.6);
+
+  /* box-shadow: 
+    0 10px 30px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.1); */
+
+  
+
+ display:flex;
+  flex-direction:column;
+
+  justify-content:space-between;   /* ⭐ KEY LINE */
+  align-items:stretch;             /* ⭐ full width sections */
+
+
+
+  color: white;
+  font-family: Inter, sans-serif;
+}
+
+/* TOP SWITCH */
+.bc-top-switch{
+  width:100%;
+  padding:10px 10px 10px;
+  box-sizing:border-box;
+}
+.bc-middle-row{
+  width:90%;
+  display:flex;
+  flex-direction: column;
+  gap:10px;
+   margin: 0 auto;
+  /* align-items:center; */
+}
+.bc-switch-pill{
+  width:100%;
+  height:90px;          /* 🔥 responsive height */
+  min-height:32px;       /* safety for very small screens */
+  max-height:48px;
+
+  border-radius:999px;
+   background:rgba(72, 78, 95, 0.5);
+
+  display:flex;
+  position:relative;
+  overflow:hidden;
+}
+.bc-switch-tab{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:12px;     /* 🔥 responsive text */
+  min-font-size:12px;
+
+  font-weight:600;
+  letter-spacing:.03em;
+  cursor:pointer;
+  z-index:2;
+}
+
+@media (max-width:1200px){
+  .bc-switch-tab{
+    font-size:12px;
+  }
+}
+.bc-switch-highlight{
+  position:absolute;
+  top:4%;
+  left:2%;
+  width:48%;
+  height:92%;
+  border-radius:999px;
+  background:#0c71ec;
+  transition:.25s;
+}
+.bc-switch-pill.bc-auto-active .bc-switch-highlight{
+  transform:translateX(100%);
+}
+.bc-switch-pill.bc-auto-active .bc-tab-auto{
+  color:white;
+}
+
+.bc-switch-pill.bc-auto-active .bc-tab-bet{
+  color:#7c8088;
+}
+
+.bc-switch-pill:not(.bc-auto-active) .bc-tab-bet{
+  color:white;
+}
+
+
+.bc-switch-pill div{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:13px;       /* ⭐ slightly bigger text */
+  border-radius:30px;
+  color:#8c8f96;
+
+  transition:.2s;
+}
+
+.bc-switch-active{
+  background:#2a2c31;
+  color:white;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+/* MAIN CONTENT */
+.bc-content{
+  width:100%;
+  flex:1;                 /* ⭐ takes remaining vertical space */
+  display:flex;
+  flex-direction:column;
+  justify-content:space-evenly;   /* ⭐ spreads amount row + button nicely */
+  align-items:stretch;
+ 
+  gap:14px;
+}
+
+
+
+/* AMOUNT ROW */
+.bc-amount-row{
+  flex:1;
+
+  height:50%;              /* ⭐ half of middle row */
+  min-height:44px;
+
+   background:rgba(72, 78, 95, 0.5);
+
+  border-radius:999px;     /* ⭐ PERFECT pill */
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 5px
+}
+.bc-circle{
+  width:40px;
+  height:40px;
+
+  min-width:28px;
+  min-height:28px;
+
+  border-radius:50%;
+ background:rgba(0, 0, 0, 0.5);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:"Montserrat-b", sans-serif;
+  font-size:20px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.bc-circle:hover{
+  background:#0c71ec;
+}
+.bc-circle,
+.bc-q,
+.bc-bet-btn,
+.bc-switch-pill div {
+  cursor: pointer;
+}
+.bc-amount {
+font-size:19px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* QUICK BUTTONS */
+.bc-quick{
+   flex:1.2;
+  height:100%;   
+
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:10px;
+
+  height:74px;
+  min-height:74px;
+}
+
+.bc-quick div {
+  background:rgba(72, 78, 95, 0.5);
+ 
+  text-align: center;
+    padding:4px 0;
+  font-size:12px;
+  border-radius:10px;
+  color: #9aa0a8;
+ 
+}
+
+/* GREEN BET BUTTON */
+.bc-bet-btn{
+  width:100%;
+  max-width:260px;
+
+  height:64px;          /* ⭐ taller button */
+  min-height:60px;
+
+  border-radius:999px;  /* ⭐ perfect rounded capsule */
+
+  background:rgba(12, 113, 236, 0.8);
+  border:none;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  font-weight:800;
+  cursor:pointer;
+
+  transition:.15s ease;
+}
+
+.bc-bet-row{
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+
+
+/* ⭐ NORMAL */
+.bc-state-normal{
+  background:#0c71ec;
+
+}
+
+/* ⭐ SCHEDULED */
+.bc-state-schedule{
+  background:#2a2c31;
+ 
+}
+
+.bc-state-schedule .bc-bet-title{
+  font-size:20px;
+}
+
+.bc-state-schedule .bc-bet-amt{
+  display:none;
+}
+
+/* ⭐ CASHOUT (casino green glow) */
+.bc-state-cashout{
+  background:linear-gradient(180deg,#19c37d,#11945f);
+
+
+}
+
+.bc-state-cashout .bc-bet-title{
+  font-size:20px;
+}
+
+.bc-state-cashout .bc-bet-amt{
+  font-size:16px;
+  opacity:1;
+}
+/* ⭐ DISABLED (after cashout pressed) */
+.bc-state-disabled{
+  background:#141519;
+
+
+  cursor: default;
+  opacity:.7;
+}
+
+.bc-state-disabled .bc-bet-title{
+  font-size:20px;
+  color:#9aa0a8;
+}
+
+.bc-state-disabled .bc-bet-amt{
+  font-size:14px;
+  color:#6f747c;
+  opacity:1;
+}
+.bc-bet-title {
+font-size:22px;   /* was 28 */
+  font-weight: 600;
+}
+
+.bc-bet-amt {
+   font-size:14px;   /* was 18 */
+  opacity: 0.9;
+}
+
+.bc-q{
+  background:rgba(69, 86, 148, 0.5);
+  border-radius:10px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.bc-q:hover{
+  background:#0c71ec;
+  transform:scale(1.05);
+}
+.bc-autocash-row{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:4px 15px;
+  box-sizing:border-box;
+}
+.bc-autocash-left{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;   /* 🔥 STACK label + input */
+  gap: 6px;
+}
+.bc-autocash-label{
+  font-size:20px;
+  font-weight:700;
+  color:rgba(0, 0, 0, 0.85);;
+}
+
+/* TOGGLE */
+.bc-toggle{
+  width:46px;
+  height:24px;
+  border-radius:999px;
+  background:#2a2c31;
+  position:relative;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.bc-toggle-knob{
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:white;
+  transition:.25s;
+}
+
+/* ACTIVE STATE */
+.bc-toggle.bc-active{
+  background:#0c71ec;
+}
+
+.bc-toggle.bc-active .bc-toggle-knob{
+  transform:translateX(22px);
+}
+.bc-autocash-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;   /* keeps toggle centered vertically */
+}
+
+
+
+/* RIGHT SIDE */
+.bc-autocash-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* INPUT CAPSULE */
+.bc-autocash-input{
+  height:30px;
+  min-width:70px;
+  /* padding:0 8px; */
+  width: 100%;
+  border-radius:15px;
+ background:rgba(0, 0, 0, 0.6);
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  /* gap:4px; */
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.05);
+}
+
+.bc-autocash-val{
+  width:40px;
+  background:transparent;
+  border:none;
+  outline:none;
+  color:white;
+
+  font-size:13px;
+  font-weight:600;
+  text-align:right;
+}
+
+.bc-autocash-x{
+  font-size:12px;
+  color:#6f747c;
+  font-weight:600;
+}
+@media (max-width: 1000px){
+
+  .bet-card-ui{
+    height: 100%;
+    max-height: none;
+    overflow: hidden;
+    padding:10px 14px;   /* 🔥 reduced */
+    gap:8px;
+  }
+
+  .bet-panel-wrapper {
+    overflow: hidden;
+  }
+
+  /* ✅ ROW LAYOUT */
+  .bc-middle-row{
+    width:100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap:6px;
+  }
+
+  /* ✅ AMOUNT ROW SHRINK */
+  .bc-amount-row{
+    flex:1;
+    height:42px;   /* 🔥 was 56 */
+    padding:0 4px;
+  }
+
+  /* ✅ +/- BUTTON SHRINK */
+  .bc-circle{
+    width:28px;
+    height:28px;
+    min-width:28px;
+    min-height:28px;
+    font-size:14px;
+  }
+
+  /* ✅ AMOUNT TEXT */
+  .bc-amount{
+    font-size:14px;
+  }
+
+  /* ✅ QUICK BUTTONS SHRINK */
+  .bc-quick{
+    flex:1;
+    height:42px;   /* 🔥 was 56 */
+    min-height:42px;
+    gap:4px;
+  }
+
+  .bc-quick div{
+    font-size:10px;
+    padding:2px 0;
+  }
+
+  /* ✅ BET BUTTON SHRINK */
+  .bc-bet-btn{
+    height:42px;     /* 🔥 was 56/64 */
+    min-height:42px;
+  }
+
+  .bc-bet-title{
+    font-size:16px;
+  }
+
+  .bc-bet-amt{
+    font-size:11px;
+  }
+
+  /* ❌ HIDE AUTOCASH (clean mobile) */
+  .bc-autocash-row{
+    display: none;
+  }
+
+}
