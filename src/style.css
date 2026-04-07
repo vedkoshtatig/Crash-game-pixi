@@ -64,7 +64,26 @@ body {
   pointer-events: none;
   z-index: 10;
 }
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* space between logo and text */
+}
+
+.title-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.title {
+  color: white;
+  font-size: 32px;
+  letter-spacing: 4px;
+  font-family: "Montserrat-b", sans-serif;
+}
 #loading-screen {
+  cursor:pointer;
   position: fixed;
   inset: 0;
   background: #000;
@@ -82,9 +101,19 @@ body {
   letter-spacing: 4px;
   font-family: "Montserrat-b", sans-serif;
 }
+.start-text {
+  color: #ffffff;
+  font-size: 24px;
+  opacity: 0.7;
+  font-family: "Montserrat-b", sans-serif;
+  margin-top: 10px;
+  letter-spacing: 1px;
+  animation: blink 1.2s infinite;
+}
+
 
 .loading-bar-container {
-  width: 300px;
+  width: 550px;
   height: 30px;
   background: #222;
   border-radius: 20px;

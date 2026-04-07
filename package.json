@@ -23,6 +23,7 @@
   "dependencies": {
     "@esotericsoftware/spine-pixi-v8": "^4.2.109",
     "@pixi/filter-drop-shadow": "^5.2.0",
+    "@pixi/sound": "^6.0.1",
     "events": "^3.3.0",
     "gsap": "^3.14.2",
     "howler": "^2.2.4",

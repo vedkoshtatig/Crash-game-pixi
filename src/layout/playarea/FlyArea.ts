@@ -4,6 +4,7 @@ import { gameEvents } from "../../controller/GameController";
 import { gsap } from "gsap";
 import { CrashGameStore } from "../../store/GameStore";
 import { Spine } from "@esotericsoftware/spine-pixi-v8";
+import { SoundManager } from "../../core/SoundManager";
 // await Assets.load(["/bg.png","/plane-idle.png" , "/plane-run.png" ,"/plane-blast.png","Clouds_01.png"]);
 
 export class FlyArea extends Container {
@@ -398,7 +399,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
     // const { width, height } = app.screen;
 
     this.cloudsActive = false;
-
+    SoundManager.instance.stop("crash");
     this.clouds.forEach((cloud) => {
       gsap.to(cloud, {
         alpha: 0,
@@ -527,8 +528,11 @@ const x = Math.min(this.startX + time * speed, maxX);
 
     let remaining = seconds;
     this.timerText.text = remaining.toString();
-
+    
     const pulse = () => {
+      SoundManager.instance.play("timer", {
+        volume: 0.4,
+      });
       gsap.killTweensOf(this.timerText.scale);
       gsap.killTweensOf(this.timerText);
 
@@ -591,6 +595,9 @@ const x = Math.min(this.startX + time * speed, maxX);
   }
 
   crashPlane(rate: number) {
+    SoundManager.instance.play("crash", {
+  volume: 0.3,
+});
     this.isCrashed = true;
     this.cloudsActive = false;
     this.plane.visible = false;
