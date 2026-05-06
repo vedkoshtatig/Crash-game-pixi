@@ -59,6 +59,8 @@ const waitSeconds = data.bettingWindowSeconds
          this.loadHistory()
         return
       }
+
+      //  WAITING PHASE
    
 
       //  BETTING LOCKED

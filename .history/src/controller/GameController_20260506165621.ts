@@ -53,13 +53,28 @@ gameEvents.emit("history:update", history)
 
         this.flightStarted = false
         this.zeroSeen = false
-const waitSeconds = data.bettingWindowSeconds
+
         gameEvents.emit("round:created", { roundId })
-        gameEvents.emit("round:waiting", { waitSeconds })
          this.loadHistory()
         return
       }
-   
+
+      //  WAITING PHASE
+      if (event.includes("waitingTimer")) {
+
+        const seconds = data.seconds
+
+        if (this.store.phase !== "WAITING") {
+
+          this.store.setPhase("WAITING")
+          this.store.onRoundWaiting()
+
+        }
+
+        gameEvents.emit("round:waiting", { seconds })
+       
+        return
+      }
 
       //  BETTING LOCKED
      if (event.includes("roundBettingOnHold")) {
@@ -99,7 +114,7 @@ const waitSeconds = data.bettingWindowSeconds
           gameEvents.emit("round:start")
         }
 
-        const time = data.elapsedMs;
+        const time = data.ela
         const multiplier = data.multiplier
 
         this.store.updateMultiplier(multiplier)

@@ -55,11 +55,26 @@ gameEvents.emit("history:update", history)
         this.zeroSeen = false
 const waitSeconds = data.bettingWindowSeconds
         gameEvents.emit("round:created", { roundId })
-        gameEvents.emit("round:waiting", { waitSeconds })
          this.loadHistory()
         return
       }
-   
+
+      //  WAITING PHASE
+      if (event.includes("waitingTimer")) {
+
+        
+
+        if (this.store.phase !== "WAITING") {
+
+          this.store.setPhase("WAITING")
+          this.store.onRoundWaiting()
+
+        }
+
+        
+       
+        return
+      }
 
       //  BETTING LOCKED
      if (event.includes("roundBettingOnHold")) {

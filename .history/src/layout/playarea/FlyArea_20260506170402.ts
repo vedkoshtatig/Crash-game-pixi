@@ -364,7 +364,7 @@ this.plane.scale.set(planeBaseScale * 0.085);
 
       this.resetScene();
       this.resetPlane();
-      this.waitTimer(data.seconds);
+      this.waitTimer(data.se);
     });
 
     gameEvents.on("round:start", () => {
@@ -521,91 +521,87 @@ const x = Math.min(this.startX + time * speed, maxX);
   }
 
   waitTimer(seconds: number) {
-  if (!seconds || seconds <= 0) return;
+    this.placeBetText.alpha = 1;
+    this.placeBetText.scale.set(1);
+    this.placeBetText.visible = true;
+    this.timerText.style.fontSize = 60;
 
-  // Reset UI
-  this.placeBetText.alpha = 1;
-  this.placeBetText.scale.set(1);
-  this.placeBetText.visible = true;
-
-  this.timerText.style.fontSize = 60;
-  this.timerText.visible = true;
-  this.timerText.style.fill = 0xffffff;
-
-  this.multiplierText.visible = false;
-  this.multiplierText.style.fontFamily = "Montserrat-b";
-
-  // Clear previous timer
-  if (this.countdownInterval) {
-    clearInterval(this.countdownInterval);
-  }
-
-  let remaining = Math.floor(seconds);
-  this.timerText.text = remaining.toString();
-
-  const pulse = () => {
-    SoundManager.instance.play("timer", { volume: 0.4 });
-
-    gsap.killTweensOf(this.timerText.scale);
-    gsap.killTweensOf(this.timerText);
-
-    this.timerText.scale.set(1);
-
-    gsap.fromTo(
-      this.timerText.scale,
-      { x: 0.6, y: 0.6 },
-      {
-        x: 1.4,
-        y: 1.4,
-        duration: 0.45,
-        ease: "power2.out",
-        yoyo: true,
-        repeat: 1,
-      }
-    );
-
-    gsap.fromTo(
-      this.timerText,
-      { alpha: 0.5 },
-      {
-        alpha: 1,
-        duration: 0.45,
-        yoyo: true,
-        repeat: 1,
-      }
-    );
-  };
-
-  pulse();
-
-  this.countdownInterval = setInterval(() => {
-    remaining--;
-
-    if (remaining <= 0) {
+    if (this.countdownInterval) {
       clearInterval(this.countdownInterval);
-
-      gsap.to([this.timerText, this.placeBetText], {
-        scale: 2,
-        alpha: 0,
-        duration: 0.5,
-        ease: "power3.out",
-        onComplete: () => {
-          this.timerText.visible = false;
-          this.placeBetText.visible = false;
-
-          this.timerText.scale.set(1);
-          this.timerText.alpha = 1;
-
-          this.placeBetText.scale.set(1);
-          this.placeBetText.alpha = 1;
-        },
-      });
-    } else {
-      this.timerText.text = remaining.toString();
-      pulse();
     }
-  }, 1000);
-}
+    this.multiplierText.style.fontFamily = "Montserrat-b";
+    this.multiplierText.visible = false;
+
+    this.timerText.visible = true;
+    this.timerText.style.fill = 0xffffff;
+
+    let remaining = seconds;
+    this.timerText.text = remaining.toString();
+    
+    const pulse = () => {
+      SoundManager.instance.play("timer", {
+        volume: 0.4,
+      });
+      gsap.killTweensOf(this.timerText.scale);
+      gsap.killTweensOf(this.timerText);
+
+      this.timerText.scale.set(1);
+
+      gsap.fromTo(
+        this.timerText.scale,
+        { x: 0.6, y: 0.6 },
+        {
+          x: 1.4,
+          y: 1.4,
+          duration: 0.45,
+          ease: "power2.out",
+          yoyo: true,
+          repeat: 1,
+        }
+      );
+
+      gsap.fromTo(
+        this.timerText,
+        { alpha: 0.5 },
+        {
+          alpha: 1,
+          duration: 0.45,
+          yoyo: true,
+          repeat: 1,
+        }
+      );
+    };
+
+    pulse();
+
+    this.countdownInterval = setInterval(() => {
+      remaining--;
+
+      if (remaining <= 0) {
+        clearInterval(this.countdownInterval);
+
+        gsap.to([this.timerText, this.placeBetText], {
+          scale: 2,
+          alpha: 0,
+          duration: 0.5,
+          ease: "power3.out",
+          onComplete: () => {
+            this.timerText.visible = false;
+            this.placeBetText.visible = false;
+
+            this.timerText.scale.set(1);
+            this.timerText.alpha = 1;
+
+            this.placeBetText.scale.set(1);
+            this.placeBetText.alpha = 1;
+          },
+        });
+      } else {
+        this.timerText.text = remaining.toString();
+        pulse();
+      }
+    }, 1000);
+  }
 
   crashPlane(rate: number) {
     SoundManager.instance.play("crash", {

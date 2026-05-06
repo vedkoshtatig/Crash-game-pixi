@@ -21,6 +21,8 @@ export class SoundManager {
       { alias: "bgMusic", src:`${baseUrl}/sfx/BGM-Low-DCible.mp3`},
      
       { alias: "crash", src:`${baseUrl}/sfx/Blast.mp3` },
+      { alias: "takeOff", src:`${baseUrl}/sfx/Start-TakeOff.mp3` },
+      { alias: "fly", src:`${baseUrl}/sfx/inthe.air.mp3` },
       { alias: "timer", src:`${baseUrl}/sfx/count.mp3` },
     ];
 
@@ -64,7 +66,7 @@ playMusic() {
 
   this.play("bgMusic", {
     loop: true,
-    volume: 0.3,
+    volume: 0.9,
   });
 }
 
