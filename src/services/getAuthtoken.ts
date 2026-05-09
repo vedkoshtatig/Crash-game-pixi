@@ -1,5 +1,7 @@
 export function getAuthToken() {
-  const token = new URLSearchParams(location.search).get("token");
-
-  return token;
+  return (
+    new URLSearchParams(location.search).get("token") ??
+    import.meta.env.VITE_DEV_TOKEN ??
+    null
+  );
 }

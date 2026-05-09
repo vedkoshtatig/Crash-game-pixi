@@ -1,7 +1,6 @@
 export class ApiClient {
 
   private BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  // private GRAIL_BET_URL = 'https://api-dev.grailbet.com/api/v1'
 
   private token: string | null;
 
@@ -20,57 +19,63 @@ export class ApiClient {
 
     if (!res.ok) {
       const txt = await res.text();
-
       console.error("API ERROR:", txt);
       throw new Error("API request failed");
     }
 
-    const data = await res.json();
-    // console.log("API RESPONSE →", data);
-    return data;
+    return res.json();
   }
 
-  getGameStatus() {
-    return this.request("/crash-game/get-crash-game-status", {
-      method: "GET",
-    });
+  getSession() {
+    return this.request<{
+      data: {
+        sessionId: string;
+        operatorCode: string;
+        playerExternalId: string;
+        playerNickname: string;
+        currency: string;
+        gameCode: string;
+        balance: { amount: string; currency: string } | null;
+      };
+    }>("/runtime/v1/session", { method: "GET" });
   }
 
-  placeBet(betAmount: number, autoRate: number) {
-    return this.request("/crash-game/place-bet-crash-game", {
+  getRound() {
+    return this.request<{
+      data: {
+        currentRound: {
+          id: string;
+          roundId: string;
+          roundState: string;
+          onHoldAt?: string;
+          createdAt: string;
+        } | null;
+        previousRounds: { roundId: string; crashRate: string; startedAt: string; stoppedAt: string }[];
+        topWinners: any[];
+      };
+    }>("/runtime/v1/crash/round", { method: "GET" });
+  }
+
+  placeBet(betAmount: number, autoRate: number | null) {
+    return this.request("/runtime/v1/crash/bets", {
       method: "POST",
-      body: JSON.stringify({
-        betAmount,
-        autoRate,
-        currencyCode: "USD",
-      }),
-    });
-  }
-
-  cancelBet() {
-    return this.request("/crash-game/cancel-bet-crash-game", {
-      method: "POST",
+      body: JSON.stringify({ betAmount, autoRate }),
     });
   }
 
   cashOut() {
-    return this.request<{ data: { winningAmount: number } }>(
-      "/crash-game/player-escape-crashGame",
-      {
+    return this.request<{
+      data: {
+        id: string;
+        roundId: string;
+        escapeRate: string;
+        result: string;
+        winningAmount: string;
+        balanceAfter: string;
+      };
+    }>("/runtime/v1/crash/cashout", {
       method: "POST",
-      }
-    );
+      body: "{}",
+    });
   }
-getCrashHistory(limit = 20, offset = 0) {
-  return this.request<{
-    data: any;
-    count: number
-    rows: { roundId: string; crashRate: number }[]
-  }>(
-    `/crash-game/get-crash-game-history?limit=${limit}&offset=${offset}`,
-    {
-      method: "GET",
-    }
-  )
-}
 }

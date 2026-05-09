@@ -88,11 +88,12 @@ setAutoBet(val: boolean) {
   }
 
   if (this.hasBet) return
-  if(this.autoCashoutMultiplier>20){
-    this.autoCashoutMultiplier=20;
-  }
+
+  // null = manual cashout; positive value = auto-escape at that multiplier
+  const autoRate = this.autoCashoutEnabled ? this.autoCashoutMultiplier : null
+
   try {
-    const res = await this.api.placeBet(this.betAmount,this.autoCashoutMultiplier)
+    const res = await this.api.placeBet(this.betAmount, autoRate)
 
     this.hasBet = true
     this.currentRoundBet = this.betAmount
@@ -128,23 +129,8 @@ cancelScheduledBet() {
   this.notify()
 }
   async cancelBet() {
-
-  if (this.phase !== "WAITING") return
-  if (!this.hasBet) return
-
-  try {
-    await this.api.cancelBet()
-
-    this.hasBet = false
-    this.currentRoundBet = 0
-
-    console.log("REAL BET CANCELLED")
-
-    this.notify()
-  } catch (e) {
-    console.log("CANCEL FAILED", e)
+    console.warn("cancelBet is not supported by the current game provider")
   }
-}
 public toggleAutoCashout(inputValue?: number) {
 
   if (this.hasBet && !this.hasCashedOut) return
@@ -252,7 +238,7 @@ startFlying() {
       const res = await this.api.cashOut();
      console.log("resss" , res);
       this.hasCashedOut = true;
-      this.winAmount = res.data.winningAmount;
+      this.winAmount = parseFloat(res.data.winningAmount);
 
       // this.setPhase("CASHED_OUT");
 
